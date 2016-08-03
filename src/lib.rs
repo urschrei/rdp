@@ -161,7 +161,7 @@ mod tests {
     }
 
     #[test]
-    fn test_coordinate_simplification() {
+    fn test_ffi_coordinate_simplification() {
         let input = vec![[0.0, 0.0], [5.0, 4.0], [11.0, 5.5], [17.3, 3.2], [27.8, 0.1]];
         let output = vec![[0.0, 0.0], [5.0, 4.0], [11.0, 5.5], [17.3, 3.2]];
         let transformed: Vec<_> = simplify_linestring_ffi(input.into(), 1.0).into();
