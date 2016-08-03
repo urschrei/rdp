@@ -15,7 +15,8 @@ The return type is the same `struct` as above, containing the simplified linestr
 Callers **must** call `drop_float_array()`, passing the returned `struct`, in order to free the memory that the shared library has allocated. Failure to do so will result in memory leaks.
 ### Example Implementation
 A Python 2.7/3.5 implementation can be found at [`ffi.py`](ffi.py
-)
+)  
+Run `cargo build --release`, then `python ffi.py` to test. It's also importable, exposing `simplify_linestring()` – call it with a coordinate list and a precision parameter. Allocated memory is dropped on exit.
 
 # License
 [MIT](license.txt)
