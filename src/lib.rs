@@ -25,17 +25,11 @@ impl From<Vec<[f64; 2]>> for Array {
     }
 }
 
-// Build &[[f64; 2]] from an Array, so it can be dropped
+// Build &[[f64; 2]] from an Array
 impl From<Array> for Vec<[f64; 2]> {
     fn from(arr: Array) -> Self {
         unsafe { slice::from_raw_parts(arr.data as *mut [f64; 2], arr.len).to_vec() }
     }
-}
-
-// Decode an Array into a Polyline
-fn simplify(incoming: Array, precision: c_double) -> Array {
-    let inc: Vec<_> = incoming.into();
-    rdp(&inc, &precision).into()
 }
 
 /// Simplify a linestring
@@ -55,8 +49,8 @@ fn simplify(incoming: Array, precision: c_double) -> Array {
 /// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
 #[no_mangle]
 pub extern "C" fn simplify_linestring_ffi(coords: Array, precision: c_double) -> Array {
-    simplify(coords, precision).into()
-    // rdp(&coords.into(), &precision)
+    let inc: Vec<_> = coords.into();
+    rdp(&inc, &precision).into()
 }
 
 /// Free Array memory which Rust has allocated across the FFI boundary
