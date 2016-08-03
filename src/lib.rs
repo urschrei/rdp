@@ -19,28 +19,31 @@ pub fn point_line_distance(point: &(f64, f64), start: &(f64, f64), end: &(f64, f
 }
 
 // Ramer–Douglas-Peucker line simplification algorithm
-// Test with an epsilon of 1.0
 pub fn rdp(points: &[(f64, f64)], epsilon: &f64) -> Vec<(f64, f64)> {
+    let mut results: Vec<(f64, f64)> = vec![];
     let mut dmax = 1.0;
     let mut index: usize = 0;
+    let mut distance: f64;
     for i in 1..points.len() - 1 {
-        let distance = point_line_distance(&points[i],
-                                           &points.first().unwrap(),
-                                           &points.last().unwrap());
+        distance = point_line_distance(&points[i],
+                                       &points.first().unwrap(),
+                                       &points.last().unwrap());
         if distance > dmax {
             index = i;
             dmax = distance;
         }
     }
-    if dmax >= *epsilon {
-        let mut first: Vec<(f64, f64)> = rdp(&points[..index + 1], &epsilon);
-        // remove last element
-        first.pop();
-        first.extend_from_slice(&rdp(&points[index..], &epsilon));
-        first
+    if dmax > *epsilon {
+        let mut intermediate_1 = rdp(&points[..index + 1], &epsilon);
+        let intermediate_2 = rdp(&points[index..(points.len() - 1)], &epsilon);
+        intermediate_1.pop();
+        results.extend_from_slice(&intermediate_1);
+        results.extend_from_slice(&intermediate_2);
+        results
     } else {
-        let other = vec![*points.first().unwrap(), *points.last().unwrap()];
-        other
+        results.push(points[0]);
+        results.push(points[points.len() - 1]);
+        results
     }
 }
 
@@ -66,8 +69,8 @@ mod tests {
 
     #[test]
     fn test_rdp() {
-        let foo: Vec<_> = rdp(&[(0.0, 0.0), (10.0, 10.0), (11.0, 11.0), (11.2, 13.45)],
-                              &1.0);
-        assert_eq!(foo, vec![(1.0, 2.0), (3.0, 4.0)]);
+        let points = vec![(0.0, 0.0), (5.0, 4.0), (11.0, 5.5), (17.3, 3.2), (27.8, 0.1)];
+        let foo: Vec<_> = rdp(&points, &1.0);
+        assert_eq!(foo, vec![(0.0, 0.0), (5.0, 4.0), (11.0, 5.5), (17.3, 3.2)]);
     }
 }
