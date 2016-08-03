@@ -9,3 +9,14 @@ repository = "https://github.com/urschrei/rdp"
 license = "MIT"
 
 [dependencies]
+libc = "0.2.14"
+
+[lib]
+name = "rdp"
+crate-type = ["rlib", "dylib"]
+test = true
+doctest = false
+doc = true
+
+[profile.release]
+rpath = true
