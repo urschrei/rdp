@@ -21,7 +21,6 @@ pub fn point_line_distance(point: &(f64, f64), start: &(f64, f64), end: &(f64, f
 // Ramer–Douglas-Peucker line simplification algorithm
 // It's OK to use unwrap here for now
 pub fn rdp(points: &[(f64, f64)], epsilon: &f64) -> Vec<(f64, f64)> {
-    let mut results: Vec<(f64, f64)> = vec![];
     let mut dmax = 1.0;
     let mut index: usize = 0;
     let mut distance: f64;
@@ -35,16 +34,13 @@ pub fn rdp(points: &[(f64, f64)], epsilon: &f64) -> Vec<(f64, f64)> {
         }
     }
     if dmax > *epsilon {
-        let mut intermediate_1 = rdp(&points[..index + 1], &*epsilon);
-        let intermediate_2 = rdp(&points[index..(points.len() - 1)], &*epsilon);
-        intermediate_1.pop();
-        results.extend_from_slice(&intermediate_1);
-        results.extend_from_slice(&intermediate_2);
-        results
+        let mut intermediate = rdp(&points[..index + 1], &*epsilon);
+        intermediate.pop();
+        // recur!
+        intermediate.extend_from_slice(&rdp(&points[index..(points.len() - 1)], &*epsilon));
+        intermediate
     } else {
-        results.push(*points.first().unwrap());
-        results.push(*points.last().unwrap());
-        results
+        vec![*points.first().unwrap(), *points.last().unwrap()]
     }
 }
 
