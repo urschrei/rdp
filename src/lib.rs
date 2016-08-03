@@ -8,7 +8,7 @@ pub fn distance(start: &(f64, f64), end: &(f64, f64)) -> f64 {
 // perpendicular distance from a point to a line
 pub fn point_line_distance(point: &(f64, f64), start: &(f64, f64), end: &(f64, f64)) -> f64 {
     if start == end {
-        return distance(&point, &start);
+        return distance(*&point, *&start);
     } else {
 
         let n = ((end.0 - start.0) * (start.1 - point.1) - (start.0 - point.0) * (end.1 - start.1))
@@ -19,30 +19,31 @@ pub fn point_line_distance(point: &(f64, f64), start: &(f64, f64), end: &(f64, f
 }
 
 // Ramer–Douglas-Peucker line simplification algorithm
+// It's OK to use unwrap here for now
 pub fn rdp(points: &[(f64, f64)], epsilon: &f64) -> Vec<(f64, f64)> {
     let mut results: Vec<(f64, f64)> = vec![];
     let mut dmax = 1.0;
     let mut index: usize = 0;
     let mut distance: f64;
-    for i in 1..points.len() - 1 {
+    for (i, _) in points.iter().enumerate().take(points.len() - 1).skip(1) {
         distance = point_line_distance(&points[i],
-                                       &points.first().unwrap(),
-                                       &points.last().unwrap());
+                                       &*points.first().unwrap(),
+                                       &*points.last().unwrap());
         if distance > dmax {
             index = i;
             dmax = distance;
         }
     }
     if dmax > *epsilon {
-        let mut intermediate_1 = rdp(&points[..index + 1], &epsilon);
-        let intermediate_2 = rdp(&points[index..(points.len() - 1)], &epsilon);
+        let mut intermediate_1 = rdp(&points[..index + 1], &*epsilon);
+        let intermediate_2 = rdp(&points[index..(points.len() - 1)], &*epsilon);
         intermediate_1.pop();
         results.extend_from_slice(&intermediate_1);
         results.extend_from_slice(&intermediate_2);
         results
     } else {
-        results.push(points[0]);
-        results.push(points[points.len() - 1]);
+        results.push(*points.first().unwrap());
+        results.push(*points.last().unwrap());
         results
     }
 }
