@@ -20,3 +20,6 @@ Run `cargo build --release`, then `python ffi.py` to test. It's also importable,
 
 # License
 [MIT](license.txt)
+
+# Notes
+This implementation doesn't use the Convex Hull speedup (Hershberger & Snoeyink, 1992)
