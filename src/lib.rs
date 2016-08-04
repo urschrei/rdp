@@ -68,8 +68,8 @@ pub extern "C" fn drop_float_array(arr: Array) {
 
 // distance formula
 pub fn distance(start: &[f64; 2], end: &[f64; 2]) -> f64 {
-    let (dx_sq, dy_sq) = (start[0].hypot(end[0]).powf(2.0), (start[1].hypot(end[1])).powf(2.0));
-    (dx_sq + dy_sq).sqrt()
+    let (dx, dy) = (start[0] - end[0], start[1] - end[1]);
+    dx.hypot(dy)
 }
 
 // perpendicular distance from a point to a line
@@ -77,12 +77,11 @@ pub fn point_line_distance(point: &[f64; 2], start: &[f64; 2], end: &[f64; 2]) -
     if start == end {
         return distance(*&point, *&start);
     } else {
-
-        let n = ((end[0] - start[0]) * (start[1] - point[1]) -
+        let numerator = ((end[0] - start[0]) * (start[1] - point[1]) -
                  (start[0] - point[0]) * (end[1] - start[1]))
             .abs();
-        let d = ((end[0] - start[0]).powf(2.0) + (end[1] - start[1]).powf(2.0)).sqrt();
-        n / d
+            let denominator = distance(start, end);
+        numerator / denominator
     }
 }
 
