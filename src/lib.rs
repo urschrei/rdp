@@ -78,7 +78,7 @@ pub fn point_line_distance(point: &[f64; 2], start: &[f64; 2], end: &[f64; 2]) -
     } else {
 
         let n = ((end[0] - start[0]) * (start[1] - point[1]) -
-                 (start[0] - point[0] * (end[1] - start[1])))
+                 (start[0] - point[0]) * (end[1] - start[1]))
             .abs();
         let d = ((end[0] - start[0]).powf(2.0) + (end[1] - start[1]).powf(2.0)).sqrt();
         n / d
@@ -129,8 +129,7 @@ mod tests {
         let start = [1.0, 2.0];
         let end = [3.0, 4.0];
         assert_eq!(point_line_distance(&point, &start, &end),
-                   1.0606601717798212);
-        // 0.7071067811865475);
+                   0.7071067811865475);
     }
 
     #[test]
