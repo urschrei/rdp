@@ -1,6 +1,6 @@
 [package]
 name = "rdp"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Stephan Hügel <urschrei@gmail.com>"]
 description = "A Rust implementation of the Ramer–Douglas–Peucker algorithm"
 readme = "README.md"

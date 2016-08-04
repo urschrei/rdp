@@ -88,7 +88,7 @@ pub fn point_line_distance(point: &[f64; 2], start: &[f64; 2], end: &[f64; 2]) -
 // Ramer–Douglas-Peucker line simplification algorithm
 // It's OK to use unwrap here for now
 pub fn rdp(points: &[[f64; 2]], epsilon: &f64) -> Vec<[f64; 2]> {
-    let mut dmax = 1.0;
+    let mut dmax = 0.0;
     let mut index: usize = 0;
     let mut distance: f64;
     for (i, _) in points.iter().enumerate().take(points.len() - 1).skip(1) {
@@ -104,7 +104,7 @@ pub fn rdp(points: &[[f64; 2]], epsilon: &f64) -> Vec<[f64; 2]> {
         let mut intermediate = rdp(&points[..index + 1], &*epsilon);
         intermediate.pop();
         // recur!
-        intermediate.extend_from_slice(&rdp(&points[index..(points.len() - 1)], &*epsilon));
+        intermediate.extend_from_slice(&rdp(&points[index..], &*epsilon));
         intermediate
     } else {
         vec![*points.first().unwrap(), *points.last().unwrap()]
@@ -136,9 +136,8 @@ mod tests {
     fn test_rdp() {
         let points = vec![[0.0, 0.0], [5.0, 4.0], [11.0, 5.5], [17.3, 3.2], [27.8, 0.1]];
         let foo: Vec<_> = rdp(&points, &1.0);
-        assert_eq!(foo, vec![[0.0, 0.0], [5.0, 4.0], [11.0, 5.5], [17.3, 3.2]]);
+        assert_eq!(foo, vec![[0.0, 0.0], [5.0, 4.0], [11.0, 5.5], [27.8, 0.1]]);
     }
-
 
     #[test]
     fn test_array_conversion() {
@@ -156,7 +155,7 @@ mod tests {
     #[test]
     fn test_ffi_coordinate_simplification() {
         let input = vec![[0.0, 0.0], [5.0, 4.0], [11.0, 5.5], [17.3, 3.2], [27.8, 0.1]];
-        let output = vec![[0.0, 0.0], [5.0, 4.0], [11.0, 5.5], [17.3, 3.2]];
+        let output = vec![[0.0, 0.0], [5.0, 4.0], [11.0, 5.5], [27.8, 0.1]];
         let transformed: Vec<_> = simplify_linestring_ffi(input.into(), 1.0).into();
         assert_eq!(&transformed, &output);
     }
