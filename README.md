@@ -21,5 +21,10 @@ Run `cargo build --release`, then `python ffi.py` to test. It's also importable,
 # License
 [MIT](license.txt)
 
+# References
+**Douglas, David H**, and **Thomas K Peucker**. 1973. *“Algorithms for the Reduction of the Number of Points Required to Represent a Digitized Line or Its Caricature.”* Cartographica: The International Journal for Geographic Information and Geovisualization 10 (2): 112–122. [DOI](http://dx.doi.org/10.3138/FM57-6770-U75U-7727)
+
+**Ramer, Urs**. 1972. *“An Iterative Procedure for the Polygonal Approximation of Plane Curves.”* Computer Graphics and Image Processing 1 (3): 244–256. [DOI](http://dx.doi.org/10.1016/S0146-664X(72)80017-0)
+
 # Notes
 This implementation doesn't use the Convex Hull speedup (Hershberger & Snoeyink, 1992)
