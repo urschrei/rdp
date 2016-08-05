@@ -16,7 +16,9 @@ Callers **must** call `drop_float_array()`, passing the returned `struct`, in or
 ### Example Implementation
 A Python 2.7/3.5 implementation can be found at [`ffi.py`](ffi.py
 )  
-Run `cargo build --release`, then `python ffi.py` to test. It's also importable, exposing `simplify_linestring()` – call it with a coordinate list and a precision parameter. Allocated memory is dropped on exit.
+Run `cargo build --release`, then `python ffi.py` to test. It's also importable, exposing `simplify_linestring()` – call it with a coordinate list and a precision parameter. Allocated memory is dropped on exit.  
+
+Some examples are available in [this Jupyter notebook](examples.ipynb).
 
 # License
 [MIT](license.txt)
