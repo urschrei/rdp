@@ -4,6 +4,9 @@ A Rust implementation of the [Ramer–Douglas-Peucker](https://en.wikipedia.org/
 Also available from [crates.io](https://crates.io/crates/rdp)  
 ## FFI
 The shared library exposes a FFI: `simplify_linestring_ffi`.  
+Some examples are available in [this Jupyter notebook](examples.ipynb).  
+(There will be a package on PyPI soon.)
+
 ### Arguments
 - A C-compatible `struct` containing the following fields:
     - `data`: a void pointer to a 2D array of double-precision floats: `[[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]]`
@@ -17,8 +20,6 @@ Callers **must** call `drop_float_array()`, passing the returned `struct`, in or
 A Python 2.7/3.5 implementation can be found at [`ffi.py`](ffi.py
 )  
 Run `cargo build --release`, then `python ffi.py` to test. It's also importable, exposing `simplify_linestring()` – call it with a coordinate list and a precision parameter. Allocated memory is dropped on exit.  
-
-Some examples are available in [this Jupyter notebook](examples.ipynb).
 
 # License
 [MIT](license.txt)
