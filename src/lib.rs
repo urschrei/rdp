@@ -89,6 +89,9 @@ fn point_line_distance(point: &[f64; 2], start: &[f64; 2], end: &[f64; 2]) -> f6
 // It's OK to use unwrap here for now
 /// Simplify a linestring using the [Ramer–Douglas–Peucker](https://en.wikipedia.org/wiki/Ramer–Douglas–Peucker_algorithm) algorithm
 pub fn rdp(points: &[[f64; 2]], epsilon: &f64) -> Vec<[f64; 2]> {
+    if points.is_empty() {
+        return points.to_vec()
+    }
     let mut dmax = 0.0;
     let mut index: usize = 0;
     let mut distance: f64;
@@ -123,7 +126,6 @@ mod tests {
         let end = [3.0, 4.0];
         assert_eq!(distance(&start, &end), 5.);
     }
-
     #[test]
     fn test_point_line_distance() {
         let point = [1.0, 1.0];
@@ -132,14 +134,18 @@ mod tests {
         assert_eq!(point_line_distance(&point, &start, &end),
                    0.7071067811865475);
     }
-
     #[test]
     fn test_rdp() {
         let points = vec![[0.0, 0.0], [5.0, 4.0], [11.0, 5.5], [17.3, 3.2], [27.8, 0.1]];
         let foo: Vec<_> = rdp(&points, &1.0);
         assert_eq!(foo, vec![[0.0, 0.0], [5.0, 4.0], [11.0, 5.5], [27.8, 0.1]]);
     }
-
+    #[test]
+    fn test_rdp_empty() {
+        let points = vec![];
+        let foo: Vec<_> = rdp(&points, &1.0);
+        assert_eq!(foo, points);
+    }
     #[test]
     fn test_array_conversion() {
         let original = vec![[0.0, 0.0], [5.0, 4.0], [11.0, 5.5], [17.3, 3.2], [27.8, 0.1]];
