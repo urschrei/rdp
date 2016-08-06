@@ -78,9 +78,9 @@ pub fn point_line_distance(point: &[f64; 2], start: &[f64; 2], end: &[f64; 2]) -
         return distance(*&point, *&start);
     } else {
         let numerator = ((end[0] - start[0]) * (start[1] - point[1]) -
-                 (start[0] - point[0]) * (end[1] - start[1]))
+                         (start[0] - point[0]) * (end[1] - start[1]))
             .abs();
-            let denominator = distance(start, end);
+        let denominator = distance(start, end);
         numerator / denominator
     }
 }
