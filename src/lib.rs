@@ -1,5 +1,6 @@
 #![doc(html_root_url = "https://urschrei.github.io/rdp/")]
-//! This crate provides a Rust implementation of the Ramer–Douglas–Peucker line simplification algorithm
+//! This crate provides a Rust implementation of the Ramer–Douglas–Peucker line simplification algorithm,
+//! and FFI functions for accessing it from third-party libraries. 
 use std::mem;
 use std::slice;
 use std::f64;
@@ -32,7 +33,7 @@ impl From<Array> for Vec<[f64; 2]> {
     }
 }
 
-/// Simplify a linestring
+/// FFI implementation of [`rdp`](fn.rdp.html)
 ///
 /// Callers must pass two arguments:
 ///
@@ -53,7 +54,7 @@ pub extern "C" fn simplify_linestring_ffi(coords: Array, precision: c_double) ->
     rdp(&inc, &precision).into()
 }
 
-/// Free Array memory which Rust has allocated across the FFI boundary
+/// Free Array memory which Rust has allocated across the FFI boundary by [`simplify_linestring_ffi`](fn.simplify_linestring_ffi.html)
 ///
 /// # Safety
 ///
@@ -67,13 +68,13 @@ pub extern "C" fn drop_float_array(arr: Array) {
 }
 
 // distance formula
-pub fn distance(start: &[f64; 2], end: &[f64; 2]) -> f64 {
+fn distance(start: &[f64; 2], end: &[f64; 2]) -> f64 {
     let (dx, dy) = (start[0] - end[0], start[1] - end[1]);
     dx.hypot(dy)
 }
 
 // perpendicular distance from a point to a line
-pub fn point_line_distance(point: &[f64; 2], start: &[f64; 2], end: &[f64; 2]) -> f64 {
+fn point_line_distance(point: &[f64; 2], start: &[f64; 2], end: &[f64; 2]) -> f64 {
     if start == end {
         return distance(*&point, *&start);
     } else {
@@ -85,8 +86,8 @@ pub fn point_line_distance(point: &[f64; 2], start: &[f64; 2], end: &[f64; 2]) -
     }
 }
 
-// Ramer–Douglas-Peucker line simplification algorithm
 // It's OK to use unwrap here for now
+/// Simplify a linestring using the [Ramer–Douglas–Peucker](https://en.wikipedia.org/wiki/Ramer–Douglas–Peucker_algorithm) algorithm
 pub fn rdp(points: &[[f64; 2]], epsilon: &f64) -> Vec<[f64; 2]> {
     let mut dmax = 0.0;
     let mut index: usize = 0;
@@ -113,7 +114,7 @@ pub fn rdp(points: &[[f64; 2]], epsilon: &f64) -> Vec<[f64; 2]> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use super::{rdp, distance, point_line_distance, simplify_linestring_ffi, drop_float_array, Array};
     use std::ptr;
 
     #[test]
