@@ -119,7 +119,6 @@ pub fn rdp(points: &[[f64; 2]], epsilon: &f64) -> Vec<[f64; 2]> {
 mod tests {
     use super::{rdp, distance, point_line_distance, simplify_linestring_ffi, drop_float_array, Array};
     use std::ptr;
-
     #[test]
     fn test_distance() {
         let start = [0.0, 0.0];
@@ -158,7 +157,6 @@ mod tests {
         // drop it
         drop_float_array(converted.into());
     }
-
     #[test]
     fn test_ffi_coordinate_simplification() {
         let input = vec![[0.0, 0.0], [5.0, 4.0], [11.0, 5.5], [17.3, 3.2], [27.8, 0.1]];
@@ -166,7 +164,6 @@ mod tests {
         let transformed: Vec<_> = simplify_linestring_ffi(input.into(), 1.0).into();
         assert_eq!(&transformed, &output);
     }
-
     #[test]
     fn test_drop_empty_float_array() {
         let original = vec![[1.0, 2.0], [3.0, 4.0]];
@@ -176,5 +173,4 @@ mod tests {
         arr.data = ptr::null();
         drop_float_array(arr);
     }
-
 }
