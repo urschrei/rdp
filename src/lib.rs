@@ -35,7 +35,7 @@ impl From<Array> for Vec<[f64; 2]> {
     }
 }
 
-/// FFI implementation of [`rdp`](fn.rdp.html)
+/// FFI wrapper for [`rdp`](fn.rdp.html)
 ///
 /// Callers must pass two arguments:
 ///
