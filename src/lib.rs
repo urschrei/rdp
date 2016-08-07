@@ -9,13 +9,14 @@ use std::f64;
 extern crate libc;
 use self::libc::{c_void, size_t, c_double};
 
+/// A C-compatible `struct` used for passing arrays across the FFI boundary
 #[repr(C)]
 pub struct Array {
     pub data: *const c_void,
     pub len: size_t,
 }
 
-// Build an Array from &[[f64; 2]], so it can be leaked across the FFI boundary
+// Build an Array from a Vec, so it can be leaked across the FFI boundary
 impl From<Vec<[f64; 2]>> for Array {
     fn from(sl: Vec<[f64; 2]>) -> Self {
         let array = Array {
@@ -27,7 +28,7 @@ impl From<Vec<[f64; 2]>> for Array {
     }
 }
 
-// Build &[[f64; 2]] from an Array
+// Build a Vec from an Array
 impl From<Array> for Vec<[f64; 2]> {
     fn from(arr: Array) -> Self {
         unsafe { slice::from_raw_parts(arr.data as *mut [f64; 2], arr.len).to_vec() }
