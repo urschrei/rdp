@@ -153,8 +153,8 @@ mod tests {
         let arr: Array = original.into();
         // move back into a Vec -- leaked value still needs to be dropped
         let converted: Vec<_> = arr.into();
-        assert_eq!(&converted,
-                   &vec![[0.0, 0.0], [5.0, 4.0], [11.0, 5.5], [17.3, 3.2], [27.8, 0.1]]);
+        assert_eq!(converted,
+                   vec![[0.0, 0.0], [5.0, 4.0], [11.0, 5.5], [17.3, 3.2], [27.8, 0.1]]);
         // drop it
         drop_float_array(converted.into());
     }
@@ -163,7 +163,7 @@ mod tests {
         let input = vec![[0.0, 0.0], [5.0, 4.0], [11.0, 5.5], [17.3, 3.2], [27.8, 0.1]];
         let output = vec![[0.0, 0.0], [5.0, 4.0], [11.0, 5.5], [27.8, 0.1]];
         let transformed: Vec<_> = simplify_linestring_ffi(input.into(), 1.0).into();
-        assert_eq!(&transformed, &output);
+        assert_eq!(transformed, output);
     }
     #[test]
     fn test_drop_empty_float_array() {
