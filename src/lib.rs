@@ -1,4 +1,5 @@
-#![doc(html_root_url = "https://urschrei.github.io/rdp/")]
+#![doc(html_logo_url = "https://raw.githubusercontent.com/urschrei/rdp/master/rdp.svg",
+       html_root_url = "https://urschrei.github.io/rdp/")]
 //! This crate provides a Rust implementation of the Ramer–Douglas–Peucker line simplification algorithm,
 //! and FFI functions for accessing it from third-party libraries. 
 use std::mem;
