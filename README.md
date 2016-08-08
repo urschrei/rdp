@@ -6,7 +6,7 @@ A Rust implementation of the [Ramer–Douglas-Peucker](https://en.wikipedia.org/
 ## FFI
 The shared library exposes a FFI: `simplify_linestring_ffi`.  
 Some examples are available in [this Jupyter notebook](examples.ipynb).  
-(There will be a package on PyPI soon.)
+**Simplification**, a Python package which uses this shared library, is available from [PyPi](https://pypi.python.org/pypi/simplification/).
 
 ### Arguments
 - A C-compatible `struct` containing the following fields:
