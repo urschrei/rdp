@@ -78,7 +78,7 @@ fn distance(start: &[f64; 2], end: &[f64; 2]) -> f64 {
 // perpendicular distance from a point to a line
 fn point_line_distance(point: &[f64; 2], start: &[f64; 2], end: &[f64; 2]) -> f64 {
     if start == end {
-        return distance(*&point, *&start);
+        distance(*&point, *&start)
     } else {
         let numerator = ((end[0] - start[0]) * (start[1] - point[1]) -
                          (start[0] - point[0]) * (end[1] - start[1]))
