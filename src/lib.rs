@@ -66,12 +66,12 @@ impl From<Array> for Vec<[f64; 2]> {
 /// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
 #[no_mangle]
 pub extern "C" fn simplify_linestring_ffi(coords: Array, precision: c_double) -> Array {
-    let inc: Vec<_> = Vec::from(coords)
-        .iter()
-        .map(|i| Point::new(i[0], i[1]))
-        .collect();
-    let ls = LineString(inc);
-    ls.simplify(&precision).into()
+    LineString(Vec::from(coords)
+            .iter()
+            .map(|i| Point::new(i[0], i[1]))
+            .collect())
+        .simplify(&precision)
+        .into()
 }
 
 /// Free Array memory which Rust has allocated across the FFI boundary by [`simplify_linestring_ffi`](fn.simplify_linestring_ffi.html)
@@ -102,7 +102,7 @@ mod tests {
     #[test]
     fn test_array_conversion() {
         let original = vec![[0.0, 0.0], [5.0, 4.0], [11.0, 5.5], [17.3, 3.2], [27.8, 0.1]];
-        let ls = LineString(original.iter().map(|i| { Point::new(i[0], i[1]) }).collect());
+        let ls = LineString(original.iter().map(|i| Point::new(i[0], i[1])).collect());
         // move into an Array, and leak it
         let arr: Array = ls.into();
         // move back into a Vec -- leaked value still needs to be dropped
@@ -110,13 +110,13 @@ mod tests {
         assert_eq!(converted,
                    vec![[0.0, 0.0], [5.0, 4.0], [11.0, 5.5], [17.3, 3.2], [27.8, 0.1]]);
         // drop it
-        let ls = LineString(converted.iter().map(|i| { Point::new(i[0], i[1]) }).collect());
+        let ls = LineString(converted.iter().map(|i| Point::new(i[0], i[1])).collect());
         drop_float_array(ls.into());
     }
     #[test]
     fn test_ffi_coordinate_simplification() {
         let input = vec![[0.0, 0.0], [5.0, 4.0], [11.0, 5.5], [17.3, 3.2], [27.8, 0.1]];
-        let ls = LineString(input.iter().map(|i| { Point::new(i[0], i[1]) }).collect());
+        let ls = LineString(input.iter().map(|i| Point::new(i[0], i[1])).collect());
         let output = vec![[0.0, 0.0], [5.0, 4.0], [11.0, 5.5], [27.8, 0.1]];
         let transformed: Vec<_> = simplify_linestring_ffi(ls.into(), 1.0).into();
         assert_eq!(transformed, output);
@@ -124,7 +124,7 @@ mod tests {
     #[test]
     fn test_drop_empty_float_array() {
         let original = vec![[1.0, 2.0], [3.0, 4.0]];
-        let ls = LineString(original.iter().map(|i| { Point::new(i[0], i[1]) }).collect());
+        let ls = LineString(original.iter().map(|i| Point::new(i[0], i[1])).collect());
         // move into an Array, and leak it
         let mut arr: Array = ls.into();
         // zero Array contents
