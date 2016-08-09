@@ -10,6 +10,8 @@ license = "MIT"
 
 [dependencies]
 libc = "0.2.14"
+geo = "0.2.5"
+num = "0.1"
 
 [lib]
 name = "rdp"
