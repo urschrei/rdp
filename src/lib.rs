@@ -1,7 +1,7 @@
 #![doc(html_logo_url = "https://cdn.rawgit.com/urschrei/rdp/6c84264fd9cdc0b8fdf974fc98e51fea4834ed05/rdp.svg",
        html_root_url = "https://urschrei.github.io/rdp/")]
-//! This crate provides a Rust implementation of the Ramer–Douglas–Peucker line simplification algorithm,
-//! and FFI functions for accessing it from third-party libraries.
+//! This crate provides FFI functions for accessing the Ramer–Douglas–Peucker line simplification algorithm
+
 use std::mem;
 use std::slice;
 use std::f64;
@@ -10,7 +10,7 @@ extern crate libc;
 use self::libc::{c_void, size_t, c_double};
 
 extern crate num;
-use num::Float;
+use self::num::Float;
 
 extern crate geo;
 use self::geo::{Point, LineString};
@@ -27,16 +27,16 @@ pub struct Array {
 impl<T> From<LineString<T>> for Array
     where T: Float
 {
-    fn from(sl: LineString<T>) -> Self {
-        let v: Vec<[T; 2]> = sl.0
-            .iter()
-            .map(|p| [p.x(), p.y()])
-            .collect();
+    fn from(ls: LineString<T>) -> Self {
         let array = Array {
-            data: v.as_ptr() as *const c_void,
-            len: v.len() as size_t,
+            data: ls.0
+                .iter()
+                .map(|p| [p.x(), p.y()])
+                .collect::<Vec<[T; 2]>>()
+                .as_ptr() as *const c_void,
+            len: ls.0.len() as size_t,
         };
-        mem::forget(v);
+        mem::forget(ls);
         array
     }
 }
