@@ -27,16 +27,16 @@ pub struct Array {
 impl<T> From<LineString<T>> for Array
     where T: Float
 {
-    fn from(ls: LineString<T>) -> Self {
+    fn from(sl: LineString<T>) -> Self {
+        let v: Vec<[T; 2]> = sl.0
+            .iter()
+            .map(|p| [p.x(), p.y()])
+            .collect();
         let array = Array {
-            data: ls.0
-                .iter()
-                .map(|p| [p.x(), p.y()])
-                .collect::<Vec<[T; 2]>>()
-                .as_ptr() as *const c_void,
-            len: ls.0.len() as size_t,
+            data: v.as_ptr() as *const c_void,
+            len: v.len() as size_t,
         };
-        mem::forget(ls);
+        mem::forget(v);
         array
     }
 }
