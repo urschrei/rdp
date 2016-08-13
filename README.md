@@ -3,12 +3,12 @@
 # RDP
 A Rust implementation of the [Ramer–Douglas-Peucker](https://en.wikipedia.org/wiki/Ramer–Douglas–Peucker_algorithm) line simplification algorithm.
 
-**The main functionality underlying this crate has now migrated to [rust-geo](https://github.com/georust/rust-geo) as the [`Simplify`](https://georust.github.io/rust-geo/geo/algorithm/simplify/trait.Simplify.html) trait. FFI works as before.
+**The main functionality underlying this crate has now migrated to [rust-geo](https://github.com/georust/rust-geo) as the [`Simplify`](https://georust.github.io/rust-geo/geo/algorithm/simplify/trait.Simplify.html) trait.**
 
 # FFI
 The shared library exposes a(n) FFI: `simplify_linestring_ffi`.  
 Some examples are available in [this Jupyter notebook](examples.ipynb).  
-**Simplification**, a Python package which uses this shared library, is available from [PyPi](https://pypi.python.org/pypi/simplification/).
+[**Simplification**](https://pypi.python.org/pypi/simplification/), a Python package which uses this shared library, is available from PyPi.
 
 ## Arguments
 - A C-compatible `struct` containing the following fields:
