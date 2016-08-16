@@ -107,8 +107,7 @@ mod tests {
         let arr: Array = ls.into();
         // move back into a Vec -- leaked value still needs to be dropped
         let converted: Vec<_> = arr.into();
-        assert_eq!(converted,
-                   vec![[0.0, 0.0], [5.0, 4.0], [11.0, 5.5], [17.3, 3.2], [27.8, 0.1]]);
+        assert_eq!(converted, original);
         // drop it
         let ls = LineString(converted.iter().map(|i| Point::new(i[0], i[1])).collect());
         drop_float_array(ls.into());
