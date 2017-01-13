@@ -28,12 +28,11 @@ Run `cargo build --release`, then `python ffi.py` to test. It's also importable,
 [MIT](license.txt)
 
 # References
-**Douglas, David H**, and **Thomas K Peucker**. 1973. *“Algorithms for the Reduction of the Number of Points Required to Represent a Digitized Line or Its Caricature.”* Cartographica: The International Journal for Geographic Information and Geovisualization 10 (2): 112–122. [DOI](http://dx.doi.org/10.3138/FM57-6770-U75U-7727)
+**Douglas, D.H.**, **Peucker, T.K.**, 1973. *Algorithms for the reduction of the number of points required to represent a digitized line or its caricature*. Cartographica: The International Journal for Geographic Information and Geovisualization 10, 112–122. [DOI](http://dx.doi.org/10.3138/FM57-6770-U75U-7727)
 
-**Ramer, Urs**. 1972. *“An Iterative Procedure for the Polygonal Approximation of Plane Curves.”* Computer Graphics and Image Processing 1 (3): 244–256. [DOI](http://dx.doi.org/10.1016/S0146-664X(72)80017-0)
+**Ramer, U.**, 1972. *An iterative procedure for the polygonal approximation of plane curves*. Computer Graphics and Image Processing 1, 244–256. [DOI](http://dx.doi.org/10.1016/S0146-664X(72)80017-0)
 
-**Visvalingam, M.** & **Whyatt, J.D.** (1993) Line generalisation by repeated elimination of points. The Cartographic Journal 30 (1): 46–51. [DOI](http://dx.doi.org/10.1179/000870493786962263)
-
+**Visvalingam, M.**, **Whyatt, J.D.**, 1993. *Line generalisation by repeated elimination of points*. The Cartographic Journal 30, 46–51. [DOI](http://dx.doi.org/10.1179/000870493786962263)
 
 # Notes
 This implementation doesn't use the Convex Hull speedup ([Hershberger & Snoeyink](http://dl.acm.org/citation.cfm?id=902273), 1992). Its worst-case complexity is thus O(n<sup>2</sup>)
