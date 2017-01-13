@@ -83,6 +83,11 @@ simplify_coords.argtypes = (_FFIArray, c_double)
 simplify_coords.restype = _CoordResult
 simplify_coords.errcheck = _void_array_to_nested_list
 
+simplify_coords_vw = lib.simplify_visvalingam_ffi
+simplify_coords_vw.argtypes = (_FFIArray, c_double)
+simplify_coords_vw.restype = _CoordResult
+simplify_coords_vw.errcheck = _void_array_to_nested_list
+
 drop_array = lib.drop_float_array
 drop_array.argtypes = (_FFIArray,)
 drop_array.restype = None
