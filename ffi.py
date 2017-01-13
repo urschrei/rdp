@@ -78,7 +78,7 @@ def _void_array_to_nested_list(res, _func, _args):
     finally:
         drop_array(res.coords)
 
-simplify_coords = lib.simplify_linestring_ffi
+simplify_coords = lib.simplify_rdp_ffi
 simplify_coords.argtypes = (_FFIArray, c_double)
 simplify_coords.restype = _CoordResult
 simplify_coords.errcheck = _void_array_to_nested_list

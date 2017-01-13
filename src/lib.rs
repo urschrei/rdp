@@ -65,7 +65,7 @@ impl From<Array> for Vec<[f64; 2]> {
 ///
 /// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
 #[no_mangle]
-pub extern "C" fn simplify_linestring_ffi(coords: Array, precision: c_double) -> Array {
+pub extern "C" fn simplify_rdp_ffi(coords: Array, precision: c_double) -> Array {
     LineString(Vec::from(coords)
             .iter()
             .map(|i| Point::new(i[0], i[1]))
@@ -74,7 +74,7 @@ pub extern "C" fn simplify_linestring_ffi(coords: Array, precision: c_double) ->
         .into()
 }
 
-/// Free Array memory which Rust has allocated across the FFI boundary by [`simplify_linestring_ffi`](fn.simplify_linestring_ffi.html)
+/// Free Array memory which Rust has allocated across the FFI boundary by [`simplify_rdp_ffi`](fn.simplify_rdp_ffi.html)
 ///
 /// # Safety
 ///
@@ -89,7 +89,7 @@ pub extern "C" fn drop_float_array(arr: Array) {
 
 #[cfg(test)]
 mod tests {
-    use super::{simplify_linestring_ffi, drop_float_array, Array};
+    use super::{simplify_rdp_ffi, drop_float_array, Array};
     extern crate geo;
     use geo::{Point, LineString};
     extern crate num;
@@ -117,7 +117,7 @@ mod tests {
         let input = vec![[0.0, 0.0], [5.0, 4.0], [11.0, 5.5], [17.3, 3.2], [27.8, 0.1]];
         let ls = LineString(input.iter().map(|i| Point::new(i[0], i[1])).collect());
         let output = vec![[0.0, 0.0], [5.0, 4.0], [11.0, 5.5], [27.8, 0.1]];
-        let transformed: Vec<_> = simplify_linestring_ffi(ls.into(), 1.0).into();
+        let transformed: Vec<_> = simplify_rdp_ffi(ls.into(), 1.0).into();
         assert_eq!(transformed, output);
     }
     #[test]
