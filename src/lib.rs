@@ -61,7 +61,7 @@ impl From<Array> for Vec<[f64; 2]> {
 /// - a double-precision `float` for the tolerance
 ///
 /// Implementations calling this function **must** call [`drop_float_array`](fn.drop_float_array.html)
-/// with the returned `c_char` pointer, in order to free the memory it allocates.
+/// with the returned `Array` pointer, in order to free the memory it allocates.
 ///
 /// # Safety
 ///
@@ -86,7 +86,7 @@ pub extern "C" fn simplify_rdp_ffi(coords: Array, precision: c_double) -> Array 
 /// - a double-precision `float` for the epsilon
 ///
 /// Implementations calling this function **must** call [`drop_float_array`](fn.drop_float_array.html)
-/// with the returned `c_char` pointer, in order to free the memory it allocates.
+/// with the returned `Array` pointer, in order to free the memory it allocates.
 ///
 /// # Safety
 ///
