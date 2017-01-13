@@ -1,12 +1,12 @@
 [![Build Status](https://travis-ci.org/urschrei/rdp.svg?branch=master)](https://travis-ci.org/urschrei/rdp) [![Build status](https://ci.appveyor.com/api/projects/status/fc3h27ef9uhwhq20?svg=true)](https://ci.appveyor.com/project/urschrei/rdp/branch/master) [![Coverage Status](https://coveralls.io/repos/github/urschrei/rdp/badge.svg?branch=master)](https://coveralls.io/github/urschrei/rdp?branch=master) [![](https://img.shields.io/crates/v/rdp.svg)](https://crates.io/crates/rdp)
 
 # RDP
-A Rust implementation of the [Ramer–Douglas-Peucker](https://en.wikipedia.org/wiki/Ramer–Douglas–Peucker_algorithm) line simplification algorithm.
+A Rust implementation of the [Ramer–Douglas-Peucker](https://en.wikipedia.org/wiki/Ramer–Douglas–Peucker_algorithm) and [Visvalingam-Whyatt](https://bost.ocks.org/mike/simplify/) line simplification algorithms.
 
 **The main functionality underlying this crate has now migrated to [rust-geo](https://github.com/georust/rust-geo) as the [`Simplify`](https://georust.github.io/rust-geo/geo/algorithm/simplify/trait.Simplify.html) trait.**
 
 # FFI
-The shared library exposes a(n) FFI: `simplify_linestring_ffi`.  
+The shared library exposes a(n) FFI: `simplify_rdp_ffi`, and `simplify_visvalingam_ffi`.  
 Some examples are available in [this Jupyter notebook](examples.ipynb).  
 [**Simplification**](https://pypi.python.org/pypi/simplification/), a Python package which uses this shared library, is available from PyPi.
 
