@@ -35,4 +35,4 @@ Run `cargo build --release`, then `python ffi.py` to test. It's also importable,
 **Visvalingam, M.**, **Whyatt, J.D.**, 1993. *Line generalisation by repeated elimination of points*. The Cartographic Journal 30, 46–51. [DOI](http://dx.doi.org/10.1179/000870493786962263)
 
 # Notes
-This implementation doesn't use the Convex Hull speedup ([Hershberger & Snoeyink](http://dl.acm.org/citation.cfm?id=902273), 1992). Its worst-case complexity is thus O(n<sup>2</sup>)
+This RDP implementation doesn't use the Convex Hull speedup ([Hershberger & Snoeyink](http://dl.acm.org/citation.cfm?id=902273), 1992). Its worst-case complexity is thus O(n<sup>2</sup>)
