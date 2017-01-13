@@ -32,5 +32,8 @@ Run `cargo build --release`, then `python ffi.py` to test. It's also importable,
 
 **Ramer, Urs**. 1972. *“An Iterative Procedure for the Polygonal Approximation of Plane Curves.”* Computer Graphics and Image Processing 1 (3): 244–256. [DOI](http://dx.doi.org/10.1016/S0146-664X(72)80017-0)
 
+**Visvalingam, M.** & **Whyatt, J.D.** (1993) Line generalisation by repeated elimination of points. The Cartographic Journal 30 (1): 46–51. [DOI](http://dx.doi.org/10.1179/000870493786962263)
+
+
 # Notes
 This implementation doesn't use the Convex Hull speedup ([Hershberger & Snoeyink](http://dl.acm.org/citation.cfm?id=902273), 1992). Its worst-case complexity is thus O(n<sup>2</sup>)
