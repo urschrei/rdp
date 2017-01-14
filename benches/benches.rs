@@ -3,21 +3,27 @@
 extern crate test;
 use test::Bencher;
 extern crate rdp;
-use rdp::rdp;
-use rdp::visvalingam;
+extern crate geo;
+use geo::{LineString, Point};
+use geo::simplify::Simplify;
+use rdp::SimplifyVW;
 
 #[bench]
 fn bench_rdp(b: &mut Bencher) {
     let points = include!("../src/mk_route.rs");
+    let points_ls: Vec<_> = points.iter().map(|e| Point::new(e[0], e[1])).collect();
+    let ls = LineString(points_ls);
     b.iter(||{
-        rdp(&points, &0.001);
+        ls.simplify(&0.001);
     });
 }
 
 #[bench]
 fn bench_visvalingam(b: &mut Bencher) {
     let points = include!("../src/mk_route.rs");
+    let points_ls: Vec<_> = points.iter().map(|e| Point::new(e[0], e[1])).collect();
+    let ls = LineString(points_ls);
     b.iter(||{
-        visvalingam(&points, &0.0000075);
+        ls.simplifyvw(&0.0000075);
     });
 }

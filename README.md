@@ -25,6 +25,12 @@ A Python 2.7 / 3.5 / 3.6 implementation can be found at [`ffi.py`](ffi.py
 )  
 Run `cargo build --release`, then `python ffi.py` to test. It's also importable, exposing `simplify_linestring()` – call it with a coordinate list and a precision parameter. Allocated memory is dropped on exit.  
 
+# Performance & Complexity
+On an 841-point LineString, RDP runs around 3.5x faster than VW. However, RDP's time complexity is O(*n*<sup>2</sup>) – This implementation doesn't use the Convex Hull Speedup, see [Hershberger & Snoeyink](http://dl.acm.org/citation.cfm?id=902273), 1992 – whereas the VW implementation uses a min-heap, and should thus run in O(*n* log(*n*)) time, making it a better choice for larger LineStrings.  
+You can verify these times for yourself by running `cargo bench`.
+
+RDP runs around 3.5x faster than VW in order to produce the same number of output points (run `cargo bench` to verify this, using an 841-point LineString), 
+
 # License
 [MIT](license.txt)
 
@@ -34,6 +40,3 @@ Run `cargo build --release`, then `python ffi.py` to test. It's also importable,
 **Ramer, U.**, 1972. *An iterative procedure for the polygonal approximation of plane curves*. Computer Graphics and Image Processing 1, 244–256. [DOI](http://dx.doi.org/10.1016/S0146-664X(72)80017-0)
 
 **Visvalingam, M.**, **Whyatt, J.D.**, 1993. *Line generalisation by repeated elimination of points*. The Cartographic Journal 30, 46–51. [DOI](http://dx.doi.org/10.1179/000870493786962263)
-
-# Notes
-This RDP implementation doesn't use the Convex Hull speedup ([Hershberger & Snoeyink](http://dl.acm.org/citation.cfm?id=902273), 1992). Its worst-case complexity is thus O(n<sup>2</sup>)
