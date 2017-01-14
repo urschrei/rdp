@@ -29,8 +29,6 @@ Run `cargo build --release`, then `python ffi.py` to test. It's also importable,
 On an 841-point LineString, RDP runs around 3.5x faster than VW. However, RDP's time complexity is O(*n*<sup>2</sup>) – This implementation doesn't use the Convex Hull Speedup, see [Hershberger & Snoeyink](http://dl.acm.org/citation.cfm?id=902273), 1992 – whereas the VW implementation uses a min-heap, and should thus run in O(*n* log(*n*)) time, making it a better choice for larger LineStrings.  
 You can verify these times for yourself by running `cargo bench`.
 
-RDP runs around 3.5x faster than VW in order to produce the same number of output points (run `cargo bench` to verify this, using an 841-point LineString), 
-
 # License
 [MIT](license.txt)
 
