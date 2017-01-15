@@ -26,7 +26,7 @@ A Python 2.7 / 3.5 / 3.6 implementation can be found at [`ffi.py`](ffi.py
 Run `cargo build --release`, then `python ffi.py` to test. It's also importable, exposing `simplify_linestring()` – call it with a coordinate list and a precision parameter. Allocated memory is dropped on exit.  
 
 # Performance & Complexity
-On an 841-point LineString, RDP runs around 3.5x faster than VW. However, RDP's time complexity is O(*n*<sup>2</sup>) – This implementation doesn't use the Convex Hull Speedup, see [Hershberger & Snoeyink](http://dl.acm.org/citation.cfm?id=902273), 1992 – whereas the VW implementation uses a min-heap, and should thus run in O(*n* log(*n*)) time, making it a better choice for larger LineStrings.  
+On an 841-point LineString, RDP runs around 3.5x faster than VW. However, RDP's worst-case time complexity is O(*n*<sup>2</sup>) – This implementation doesn't use the Convex Hull Speedup, see [Hershberger & Snoeyink](http://dl.acm.org/citation.cfm?id=902273), 1992 – whereas the VW implementation uses a min-heap, and thus has worst-case time-complexity of O(*n* log(*n*)), which may make it a better choice for larger LineStrings under certain conditions; RDP has an *average* time complexity of O(*n* log(*n*)), but LineStrings such as the one seen [here](http://stackoverflow.com/a/31566048/416626) will slow it down significantly.
 You can verify these times for yourself by running `cargo bench`.
 
 # License
