@@ -3,7 +3,7 @@
 # RDP
 A Rust implementation of the [Ramer–Douglas-Peucker](https://en.wikipedia.org/wiki/Ramer–Douglas–Peucker_algorithm) and [Visvalingam-Whyatt](https://bost.ocks.org/mike/simplify/) line simplification algorithms.
 
-**The main functionality underlying this crate has now migrated to [rust-geo](https://github.com/georust/rust-geo) as the [`Simplify`](https://georust.github.io/rust-geo/geo/algorithm/simplify/trait.Simplify.html) trait.**
+**The algorithms underlying this crate have now migrated to [rust-geo](https://github.com/georust/rust-geo) as the [`Simplify`](https://georust.github.io/rust-geo/geo/algorithm/simplify/trait.Simplify.html) and [`SimplifyVW`](https://georust.github.io/rust-geo/geo/algorithm/simplifyvw/trait.SimplifyVW.html) traits.**
 
 # FFI
 The shared library exposes a(n) FFI: `simplify_rdp_ffi`, and `simplify_visvalingam_ffi`.  
