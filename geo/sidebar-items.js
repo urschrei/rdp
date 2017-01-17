@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Geometry",""]],"mod":[["algorithm","This module includes all the functions of geometric calculations"]],"static":[["COORD_PRECISION",""]],"struct":[["Bbox",""],["Coordinate",""],["GeometryCollection",""],["LineString",""],["MultiLineString",""],["MultiPoint",""],["MultiPolygon",""],["Point",""],["Polygon",""]],"trait":[["ToGeo",""]]});

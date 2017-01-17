@@ -1,0 +1,1 @@
+initSidebarItems({"trait":[["Intersects","Checks if the geometry A intersects the geometry B."]]});

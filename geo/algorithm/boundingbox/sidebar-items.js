@@ -1,0 +1,1 @@
+initSidebarItems({"trait":[["BoundingBox","Calculation of the bounding box of a geometry."]]});

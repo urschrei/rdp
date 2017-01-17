@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Bbox` struct in crate `geo`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Bbox">
+
+    <title>geo::Bbox - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='index.html'>geo</a></p><script>window.sidebarCurrent = {name: 'Bbox', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>geo</a>::<wbr><a class='struct' href=''>Bbox</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-537' class='srclink' href='../src/geo/types.rs.html#19-26' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct Bbox&lt;T&gt; <span class='where'>where T: <a class='trait' href='../num_traits/float/trait.Float.html' title='num_traits::float::Float'>Float</a></span> {
+    pub xmin: T,
+    pub xmax: T,
+    pub ymin: T,
+    pub ymax: T,
+}</pre><h2 class='fields'>Fields</h2><span id='structfield.xmin' class='structfield'>
+                           <span id='xmin.v' class='invisible'>
+                           <code>xmin: T</code>
+                           </span></span><span class='stab '></span><span id='structfield.xmax' class='structfield'>
+                           <span id='xmax.v' class='invisible'>
+                           <code>xmax: T</code>
+                           </span></span><span class='stab '></span><span id='structfield.ymin' class='structfield'>
+                           <span id='ymin.v' class='invisible'>
+                           <code>ymin: T</code>
+                           </span></span><span class='stab '></span><span id='structfield.ymax' class='structfield'>
+                           <span id='ymax.v' class='invisible'>
+                           <code>ymax: T</code>
+                           </span></span><span class='stab '></span><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl&lt;T:&nbsp;<a class='trait' href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a>&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a> for <a class='struct' href='../geo/struct.Bbox.html' title='geo::Bbox'>Bbox</a>&lt;T&gt; <span class='where'>where T: <a class='trait' href='../num_traits/float/trait.Float.html' title='num_traits::float::Float'>Float</a></span></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-543' class='srclink' href='../src/geo/types.rs.html#18' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.eq' class='method'><span id='eq.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq' class='fnname'>eq</a>(&amp;self, __arg_0: &amp;<a class='struct' href='../geo/struct.Bbox.html' title='geo::Bbox'>Bbox</a>&lt;T&gt;) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></span></h4>
+<div class='docblock'><p>This method tests for <code>self</code> and <code>other</code> values to be equal, and is used by <code>==</code>. <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq">Read more</a></p>
+</div><h4 id='method.ne' class='method'><span id='ne.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, __arg_0: &amp;<a class='struct' href='../geo/struct.Bbox.html' title='geo::Bbox'>Bbox</a>&lt;T&gt;) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></span></h4>
+<div class='docblock'><p>This method tests for <code>!=</code>.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;T:&nbsp;<a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a>&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='struct' href='../geo/struct.Bbox.html' title='geo::Bbox'>Bbox</a>&lt;T&gt; <span class='where'>where T: <a class='trait' href='../num_traits/float/trait.Float.html' title='num_traits::float::Float'>Float</a></span></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-567' class='srclink' href='../src/geo/types.rs.html#18' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.clone' class='method'><span id='clone.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='struct' href='../geo/struct.Bbox.html' title='geo::Bbox'>Bbox</a>&lt;T&gt;</code></span></h4>
+<div class='docblock'><p>Returns a copy of the value. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone">Read more</a></p>
+</div><h4 id='method.clone_from' class='method'><span id='clone_from.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div></span></h4>
+<div class='docblock'><p>Performs copy-assignment from <code>source</code>. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from">Read more</a></p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;T:&nbsp;<a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html' title='core::marker::Copy'>Copy</a>&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html' title='core::marker::Copy'>Copy</a> for <a class='struct' href='../geo/struct.Bbox.html' title='geo::Bbox'>Bbox</a>&lt;T&gt; <span class='where'>where T: <a class='trait' href='../num_traits/float/trait.Float.html' title='num_traits::float::Float'>Float</a></span></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-575' class='srclink' href='../src/geo/types.rs.html#18' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'></div><h3 class='impl'><span class='in-band'><code>impl&lt;T:&nbsp;<a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a>&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='struct' href='../geo/struct.Bbox.html' title='geo::Bbox'>Bbox</a>&lt;T&gt; <span class='where'>where T: <a class='trait' href='../num_traits/float/trait.Float.html' title='num_traits::float::Float'>Float</a></span></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-577' class='srclink' href='../src/geo/types.rs.html#18' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.fmt' class='method'><span id='fmt.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></span></h4>
+<div class='docblock'><p>Formats the value using the given formatter.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;T&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.Add.html' title='core::ops::Add'>Add</a> for <a class='struct' href='../geo/struct.Bbox.html' title='geo::Bbox'>Bbox</a>&lt;T&gt; <span class='where'>where T: <a class='trait' href='../num_traits/float/trait.Float.html' title='num_traits::float::Float'>Float</a> + <a class='trait' href='../num_traits/cast/trait.ToPrimitive.html' title='num_traits::cast::ToPrimitive'>ToPrimitive</a></span></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-67' class='srclink' href='../src/geo/types.rs.html#234-261' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='associatedtype.Output' class='type'><span id='Output.t' class='invisible'><code>type <a href='https://doc.rust-lang.org/nightly/core/ops/trait.Add.html#associatedtype.Output' class='type'>Output</a> = <a class='struct' href='../geo/struct.Bbox.html' title='geo::Bbox'>Bbox</a>&lt;T&gt;</code></span></h4>
+<div class='docblock'><p>The resulting type after applying the <code>+</code> operator</p>
+</div><h4 id='method.add' class='method'><span id='add.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/ops/trait.Add.html#tymethod.add' class='fnname'>add</a>(self, rhs: <a class='struct' href='../geo/struct.Bbox.html' title='geo::Bbox'>Bbox</a>&lt;T&gt;) -&gt; <a class='struct' href='../geo/struct.Bbox.html' title='geo::Bbox'>Bbox</a>&lt;T&gt;</code></span></h4>
+<div class='docblock'><p>Add a boundingox to the given boundingbox.</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>geo</span>::<span class='ident'>Bbox</span>;
+
+<span class='kw'>let</span> <span class='ident'>bbox0</span> <span class='op'>=</span> <span class='ident'>Bbox</span>{<span class='ident'>xmin</span>: <span class='number'>0.</span>,  <span class='ident'>xmax</span>: <span class='number'>10000.</span>, <span class='ident'>ymin</span>: <span class='number'>10.</span>, <span class='ident'>ymax</span>: <span class='number'>100.</span>};
+<span class='kw'>let</span> <span class='ident'>bbox1</span> <span class='op'>=</span> <span class='ident'>Bbox</span>{<span class='ident'>xmin</span>: <span class='number'>100.</span>, <span class='ident'>xmax</span>: <span class='number'>1000.</span>,  <span class='ident'>ymin</span>: <span class='number'>100.</span>,  <span class='ident'>ymax</span>: <span class='number'>1000.</span>};
+<span class='kw'>let</span> <span class='ident'>bbox</span> <span class='op'>=</span> <span class='ident'>bbox0</span> <span class='op'>+</span> <span class='ident'>bbox1</span>;
+
+<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>0.</span>, <span class='ident'>bbox</span>.<span class='ident'>xmin</span>);
+<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>10000.</span>, <span class='ident'>bbox</span>.<span class='ident'>xmax</span>);
+<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>10.</span>, <span class='ident'>bbox</span>.<span class='ident'>ymin</span>);
+<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>1000.</span>, <span class='ident'>bbox</span>.<span class='ident'>ymax</span>);</pre>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;T&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.AddAssign.html' title='core::ops::AddAssign'>AddAssign</a> for <a class='struct' href='../geo/struct.Bbox.html' title='geo::Bbox'>Bbox</a>&lt;T&gt; <span class='where'>where T: <a class='trait' href='../num_traits/float/trait.Float.html' title='num_traits::float::Float'>Float</a> + <a class='trait' href='../num_traits/cast/trait.ToPrimitive.html' title='num_traits::cast::ToPrimitive'>ToPrimitive</a></span></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-73' class='srclink' href='../src/geo/types.rs.html#263-286' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.add_assign' class='method'><span id='add_assign.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/ops/trait.AddAssign.html#tymethod.add_assign' class='fnname'>add_assign</a>(&amp;mut self, rhs: <a class='struct' href='../geo/struct.Bbox.html' title='geo::Bbox'>Bbox</a>&lt;T&gt;)</code></span></h4>
+<div class='docblock'><p>Add a boundingox to the given boundingbox.</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>geo</span>::<span class='ident'>Bbox</span>;
+
+<span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>bbox0</span> <span class='op'>=</span> <span class='ident'>Bbox</span>{<span class='ident'>xmin</span>: <span class='number'>0.</span>,  <span class='ident'>xmax</span>: <span class='number'>10000.</span>, <span class='ident'>ymin</span>: <span class='number'>10.</span>, <span class='ident'>ymax</span>: <span class='number'>100.</span>};
+<span class='kw'>let</span> <span class='ident'>bbox1</span> <span class='op'>=</span> <span class='ident'>Bbox</span>{<span class='ident'>xmin</span>: <span class='number'>100.</span>, <span class='ident'>xmax</span>: <span class='number'>1000.</span>,  <span class='ident'>ymin</span>: <span class='number'>100.</span>,  <span class='ident'>ymax</span>: <span class='number'>1000.</span>};
+<span class='ident'>bbox0</span> <span class='op'>+=</span> <span class='ident'>bbox1</span>;
+
+<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>0.</span>, <span class='ident'>bbox0</span>.<span class='ident'>xmin</span>);
+<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>10000.</span>, <span class='ident'>bbox0</span>.<span class='ident'>xmax</span>);
+<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>10.</span>, <span class='ident'>bbox0</span>.<span class='ident'>ymin</span>);
+<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>1000.</span>, <span class='ident'>bbox0</span>.<span class='ident'>ymax</span>);</pre>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;T&gt; <a class='trait' href='../geo/algorithm/centroid/trait.Centroid.html' title='geo::algorithm::centroid::Centroid'>Centroid</a>&lt;T&gt; for <a class='struct' href='../geo/struct.Bbox.html' title='geo::Bbox'>Bbox</a>&lt;T&gt; <span class='where'>where T: <a class='trait' href='../num_traits/float/trait.Float.html' title='num_traits::float::Float'>Float</a></span></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-130' class='srclink' href='../src/geo/algorithm/centroid.rs.html#112-122' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.centroid' class='method'><span id='centroid.v' class='invisible'><code>fn <a href='../geo/algorithm/centroid/trait.Centroid.html#tymethod.centroid' class='fnname'>centroid</a>(&amp;self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../geo/struct.Point.html' title='geo::Point'>Point</a>&lt;T&gt;&gt;</code></span></h4>
+<div class='docblock'><p>Centroid on a Bbox.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;T&gt; <a class='trait' href='../geo/algorithm/contains/trait.Contains.html' title='geo::algorithm::contains::Contains'>Contains</a>&lt;<a class='struct' href='../geo/struct.Bbox.html' title='geo::Bbox'>Bbox</a>&lt;T&gt;&gt; for <a class='struct' href='../geo/struct.Bbox.html' title='geo::Bbox'>Bbox</a>&lt;T&gt; <span class='where'>where T: <a class='trait' href='../num_traits/float/trait.Float.html' title='num_traits::float::Float'>Float</a></span></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-186' class='srclink' href='../src/geo/algorithm/contains.rs.html#155-162' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.contains' class='method'><span id='contains.v' class='invisible'><code>fn <a href='../geo/algorithm/contains/trait.Contains.html#tymethod.contains' class='fnname'>contains</a>(&amp;self, bbox: &amp;<a class='struct' href='../geo/struct.Bbox.html' title='geo::Bbox'>Bbox</a>&lt;T&gt;) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></span></h4>
+<div class='docblock'><p>Checks if the geometry A is completely inside the B geometry. <a href="../geo/algorithm/contains/trait.Contains.html#tymethod.contains">Read more</a></p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;T&gt; <a class='trait' href='../geo/algorithm/intersects/trait.Intersects.html' title='geo::algorithm::intersects::Intersects'>Intersects</a>&lt;<a class='struct' href='../geo/struct.Bbox.html' title='geo::Bbox'>Bbox</a>&lt;T&gt;&gt; for <a class='struct' href='../geo/struct.Bbox.html' title='geo::Bbox'>Bbox</a>&lt;T&gt; <span class='where'>where T: <a class='trait' href='../num_traits/float/trait.Float.html' title='num_traits::float::Float'>Float</a></span></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-223' class='srclink' href='../src/geo/algorithm/intersects.rs.html#71-83' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.intersects' class='method'><span id='intersects.v' class='invisible'><code>fn <a href='../geo/algorithm/intersects/trait.Intersects.html#tymethod.intersects' class='fnname'>intersects</a>(&amp;self, bbox: &amp;<a class='struct' href='../geo/struct.Bbox.html' title='geo::Bbox'>Bbox</a>&lt;T&gt;) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></span></h4>
+<div class='docblock'><p>Checks if the geometry A intersects the geometry B. <a href="../geo/algorithm/intersects/trait.Intersects.html#tymethod.intersects">Read more</a></p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;T&gt; <a class='trait' href='../geo/algorithm/intersects/trait.Intersects.html' title='geo::algorithm::intersects::Intersects'>Intersects</a>&lt;<a class='struct' href='../geo/struct.Polygon.html' title='geo::Polygon'>Polygon</a>&lt;T&gt;&gt; for <a class='struct' href='../geo/struct.Bbox.html' title='geo::Bbox'>Bbox</a>&lt;T&gt; <span class='where'>where T: <a class='trait' href='../num_traits/float/trait.Float.html' title='num_traits::float::Float'>Float</a></span></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-228' class='srclink' href='../src/geo/algorithm/intersects.rs.html#85-91' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.intersects-1' class='method'><span id='intersects.v-1' class='invisible'><code>fn <a href='../geo/algorithm/intersects/trait.Intersects.html#tymethod.intersects' class='fnname'>intersects</a>(&amp;self, polygon: &amp;<a class='struct' href='../geo/struct.Polygon.html' title='geo::Polygon'>Polygon</a>&lt;T&gt;) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></span></h4>
+<div class='docblock'><p>Checks if the geometry A intersects the geometry B. <a href="../geo/algorithm/intersects/trait.Intersects.html#tymethod.intersects">Read more</a></p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;T&gt; <a class='trait' href='../geo/algorithm/area/trait.Area.html' title='geo::algorithm::area::Area'>Area</a>&lt;T&gt; for <a class='struct' href='../geo/struct.Bbox.html' title='geo::Bbox'>Bbox</a>&lt;T&gt; <span class='where'>where T: <a class='trait' href='../num_traits/float/trait.Float.html' title='num_traits::float::Float'>Float</a></span></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-272' class='srclink' href='../src/geo/algorithm/area.rs.html#52-58' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.area' class='method'><span id='area.v' class='invisible'><code>fn <a href='../geo/algorithm/area/trait.Area.html#tymethod.area' class='fnname'>area</a>(&amp;self) -&gt; T</code></span></h4>
+<div class='docblock'><p>Area of polygon. See: <a href="https://en.wikipedia.org/wiki/Polygon">https://en.wikipedia.org/wiki/Polygon</a> <a href="../geo/algorithm/area/trait.Area.html#tymethod.area">Read more</a></p>
+</div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "geo";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    <script defer src="../search-index.js"></script>
+</body>
+</html>

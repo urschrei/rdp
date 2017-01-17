@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["visvalingam","Simplify a line using the Visvalingam-Whyatt algorithm"]],"trait":[["SimplifyVW",""]]});

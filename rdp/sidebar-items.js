@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["drop_float_array","Free Array memory which Rust has allocated across the FFI boundary by `simplify_rdp_ffi`"],["simplify_rdp_ffi","FFI wrapper for `rdp`"],["simplify_visvalingam_ffi","FFI wrapper for `visvalingam`"]],"struct":[["Array","A C-compatible `struct` used for passing arrays across the FFI boundary"]]});
