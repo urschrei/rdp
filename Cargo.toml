@@ -1,6 +1,6 @@
 [package]
 name = "rdp"
-version = "0.2.1"
+version = "0.2.2"
 authors = ["Stephan Hügel <urschrei@gmail.com>"]
 description = "A Rust implementation of the Ramer–Douglas–Peucker and Visvalingam-Whyatt algorithms"
 readme = "README.md"
@@ -15,7 +15,7 @@ num = "0.1"
 
 [lib]
 name = "rdp"
-crate-type = ["rlib", "dylib"]
+crate-type = ["rlib", "cdylib"]
 test = true
 doctest = false
 doc = true
