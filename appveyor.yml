@@ -59,6 +59,7 @@ before_deploy:
   # build artifacts for generating a .def, needed by the MinGW Python build
   - cargo rustc --target %TARGET% --release -- -C target-cpu=native -C link-args=-Wl,--out-implib,rdp.a
   - dlltool -z target\%TARGET%\release\rdp.def --export-all-symbols target\%TARGET%\release\rdp.dll
+  - dumpbin target\%TARGET%\release\rdp.dll
   - ps: ci\before_deploy.ps1
 
 deploy:
