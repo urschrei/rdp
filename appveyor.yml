@@ -11,23 +11,23 @@ environment:
   matrix:
     # Stable channel
     # - TARGET: i686-pc-windows-msvc
-    #   CHANNEL: stable
+    #   RUST_VERSION: stable
     # - TARGET: x86_64-pc-windows-msvc
-    #   CHANNEL: stable
+    #   RUST_VERSION: stable
     - TARGET: x86_64-pc-windows-gnu
-      CHANNEL: stable
+      RUST_VERSION: stable
     - TARGET: i686-pc-windows-gnu
-      CHANNEL: nightly
+      RUST_VERSION: nightly
     # Beta channel
     # - TARGET: i686-pc-windows-msvc
-    #   CHANNEL: beta
+    #   RUST_VERSION: beta
     - TARGET: x86_64-pc-windows-gnu
-      CHANNEL: beta
+      RUST_VERSION: beta
     # Nightly channel
     # - TARGET: i686-pc-windows-msvc
-    #   CHANNEL: nightly
+    #   RUST_VERSION: nightly
     - TARGET: x86_64-pc-windows-gnu
-      CHANNEL: nightly
+      RUST_VERSION: nightly
 
 # Install Rust and Cargo
 install:
@@ -76,7 +76,7 @@ deploy:
   prerelease: false
   on:
     appveyor_repo_tag: true
-    CHANNEL: nightly
+    RUST_VERSION: nightly
 
 cache:
   - C:\Users\appveyor\.cargo\registry
