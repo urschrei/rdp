@@ -19,6 +19,7 @@ main() {
 
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
         # we've already built release binaries in Docker, so no-op
+        echo "Linux release artifacts built in manylinux1 Docker image"
     fi
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
         # TODO Update this to build the artifacts that matter to you
