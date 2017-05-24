@@ -86,7 +86,7 @@ deploy:
   prerelease: false
   on:
     appveyor_repo_tag: true
-    RUST_VERSION: nightly
+    RUST_VERSION: stable
 
 cache:
   - C:\Users\appveyor\.cargo\registry
