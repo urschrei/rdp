@@ -61,13 +61,13 @@ artifacts:
 
 before_deploy:
   # NEW Generate artifacts for release
-  - cargo rustc --target %TARGET% --release
-  - lib /machine:i386 /def:rdp.def
+  # - cargo rustc --target %TARGET% --release
 
   # OLD build artifacts for generating a .def, needed by the MinGW Python build
-  # - cargo rustc --target %TARGET% --release -- -C target-cpu=native -C link-args=-Wl,--out-implib,rdp.a
-
-  # - dir target\%TARGET%\release
+  - cargo rustc --target %TARGET% --release -- -C target-cpu=native -C link-args=-Wl,--output-def,rdp.def,--out-implib,rdp.a
+  - dir target\%TARGET%\release
+  - lib /machine:i386 /def:target\%TARGET%\release\rdp.def
+  - dir target\%TARGET%\release
   # - dlltool -z target\%TARGET%\release\rdp.def --export-all-symbols target\%TARGET%\release\rdp.dll
   - dir target\%TARGET%\release
   - set OLDPATH=%PATH%
