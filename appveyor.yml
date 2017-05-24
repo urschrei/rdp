@@ -32,6 +32,10 @@ install:
         $Env:PATH += ';C:\msys64\mingw64\bin'
       } ElseIf ($Env:TARGET -eq 'i686-pc-windows-gnu') {
         $Env:PATH += ';C:\msys64\mingw32\bin'
+      } ElseIf ($Env:TARGET -eq 'i686-pc-windows-msvc') {
+        $Env:PATH += ';C:\msys64\mingw32\bin'
+      } ElseIf ($Env:TARGET -eq 'x86_64-pc-windows-msvc') {
+        $Env:PATH += ';C:\msys64\mingw64\bin'
       }
   - ps: if ($env:APPVEYOR_PULL_REQUEST_NUMBER -and $env:APPVEYOR_BUILD_NUMBER -ne ((Invoke-RestMethod `
         https://ci.appveyor.com/api/projects/$env:APPVEYOR_ACCOUNT_NAME/$env:APPVEYOR_PROJECT_SLUG/history?recordsNumber=50).builds | `
