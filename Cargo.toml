@@ -15,7 +15,7 @@ num = "0.1"
 
 [lib]
 name = "rdp"
-crate-type = ["rlib", "cdylib"]
+crate-type = ["rlib", "dylib"]
 test = true
 doctest = false
 doc = true
