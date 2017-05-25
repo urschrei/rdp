@@ -70,6 +70,7 @@ before_deploy:
   - dlltool -z target\%TARGET%\release\rdp.def --export-all-symbols target\%TARGET%\release\rdp.dll
   # - lib /machine:i386 /def:target\%TARGET%\release\rdp.def /out:target\%TARGET%\release\rdp.lib
   - dir target\%TARGET%\release
+  - dir target\%TARGET%\release\deps
   - dumpbin /exports target\%TARGET%\release\rdp.dll > dumpbin.txt
   - appveyor PushArtifact dumpbin.txt
   - appveyor PushArtifact target\%TARGET%\release\rdp.def
