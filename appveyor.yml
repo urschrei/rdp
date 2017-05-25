@@ -10,17 +10,17 @@ environment:
   # TODO feel free to delete targets/channels you don't need
   matrix:
     # Stable channel
-    - TARGET: i686-pc-windows-msvc
+    - TARGET: i686-pc-windows-gnu
       RUST_VERSION: stable
-    - TARGET: x86_64-pc-windows-msvc
+    - TARGET: x86_64-pc-windows-gnu
       RUST_VERSION: stable
     # Beta channel
-    - TARGET: i686-pc-windows-msvc
+    - TARGET: i686-pc-windows-gnu
       RUST_VERSION: beta
     # - TARGET: x86_64-pc-windows-gnu
     #   RUST_VERSION: beta
     # Nightly channel
-    - TARGET: i686-pc-windows-msvc
+    - TARGET: i686-pc-windows-gnu
       RUST_VERSION: nightly
     # - TARGET: x86_64-pc-windows-gnu
     #   RUST_VERSION: nightly
@@ -62,17 +62,17 @@ artifacts:
 before_deploy:
   # NEW Generate artifacts for release
   - cargo rustc --target %TARGET% --release 
-
   # OLD build artifacts for generating a .def, needed by the MinGW Python build
   # - cargo rustc --target %TARGET% --release -- -C target-cpu=native -C link-args=-Wl,--out-implib,rdp.a
+
   - dir target\%TARGET%\release
-  - cp src/rdp.def target\%TARGET%\release\rdp.def
+  # - cp src/rdp.def target\%TARGET%\release\rdp.def
+  - dlltool -z target\%TARGET%\release\rdp.def --export-all-symbols target\%TARGET%\release\rdp.dll
   - lib /machine:i386 /def:target\%TARGET%\release\rdp.def /out:target\%TARGET%\release\rdp.lib
-  # - dlltool -z target\%TARGET%\release\rdp.def --export-all-symbols target\%TARGET%\release\rdp.dll
   - dir target\%TARGET%\release
-  - set OLDPATH=%PATH%
   - dumpbin /exports target\%TARGET%\release\rdp.dll > dumpbin.txt
   - appveyor PushArtifact dumpbin.txt
+  - appveyor PushArtifact target\%TARGET%\release\rdp.def
   - ps: ci\before_deploy.ps1
 
 deploy:
