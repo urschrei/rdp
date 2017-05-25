@@ -61,7 +61,7 @@ artifacts:
 
 before_deploy:
   # NEW Generate artifacts for release
-  - cargo rustc --target %TARGET% --release2
+  - cargo rustc --target %TARGET% --release
 
   # OLD build artifacts for generating a .def, needed by the MinGW Python build
   # - cargo rustc --target %TARGET% --release -- -C target-cpu=native -C link-args=-Wl,--out-implib,rdp.a
