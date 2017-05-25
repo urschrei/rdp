@@ -66,10 +66,11 @@ before_deploy:
   # - cargo rustc --target %TARGET% --release -- -C target-cpu=native -C link-args=-Wl,--out-implib,rdp.a
 
   - dir target\%TARGET%\release
-  # - cp src/rdp.def target\%TARGET%\release\rdp.def
   - dlltool -z target\%TARGET%\release\rdp.def --export-all-symbols target\%TARGET%\release\rdp.dll
   # - lib /machine:i386 /def:target\%TARGET%\release\rdp.def /out:target\%TARGET%\release\rdp.lib
   - dir target\%TARGET%\release
+  # Python build expects name.lib, not name.dll.lib
+  - cp target\%TARGET%\release\deps\rdp.dll.lib target\%TARGET%\release\deps\rdp.lib
   - dir target\%TARGET%\release\deps
   - dumpbin /exports target\%TARGET%\release\rdp.dll > dumpbin.txt
   - appveyor PushArtifact dumpbin.txt
