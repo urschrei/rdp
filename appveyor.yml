@@ -74,8 +74,10 @@ before_deploy:
   - dir target\%TARGET%\release\deps
     # Python build expects name.lib, not name.dll.lib
   - cp target\%TARGET%\release\deps\rdp.dll.lib target\%TARGET%\release\deps\rdp.lib
-  - dumpbin /exports target\%TARGET%\release\rdp.dll > dumpbin.txt
-  - appveyor PushArtifact dumpbin.txt
+  - dumpbin /exports target\%TARGET%\release\rdp.dll > dumpbin_exports.txt
+  - dumpbin /dependents target\%TARGET%\release\rdp.dll > dumpbin_dependents.txt
+  - appveyor PushArtifact dumpbin_exports.txt
+  - appveyor PushArtifact dumpbin_dependents.txt
   - appveyor PushArtifact target\%TARGET%\release\rdp.def
   - ps: ci\before_deploy.ps1
 
