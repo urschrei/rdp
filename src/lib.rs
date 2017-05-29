@@ -58,7 +58,7 @@ impl From<Array> for Vec<[f64; 2]> {
 /// Callers must pass two arguments:
 ///
 /// - a [Struct](struct.Array.html) with two fields:
-///     - `data`, a void pointer to an array of floating-point point coordinates: `[[1.0, 2.0], …]`
+///     - `data`, a void pointer to an array of floating-point point coordinates: `[[1.0, 2.0], ...]`
 ///     - `len`, the length of the array being passed. Its type must be `size_t`
 /// - a double-precision `float` for the tolerance
 ///
@@ -83,7 +83,7 @@ pub extern "C" fn simplify_rdp_ffi(coords: Array, precision: libc::c_double) -> 
 /// Callers must pass two arguments:
 ///
 /// - a [Struct](struct.Array.html) with two fields:
-///     - `data`, a void pointer to an array of floating-point point coordinates: `[[1.0, 2.0], …]`
+///     - `data`, a void pointer to an array of floating-point point coordinates: `[[1.0, 2.0], ...]`
 ///     - `len`, the length of the array being passed. Its type must be `size_t`
 /// - a double-precision `float` for the epsilon
 ///
