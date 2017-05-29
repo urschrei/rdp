@@ -7,6 +7,7 @@ use std::slice;
 use std::f64;
 
 extern crate libc;
+
 extern crate num;
 use self::num::Float;
 
