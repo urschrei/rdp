@@ -2,5 +2,5 @@ extern crate cheddar;
 
 fn main() {
     cheddar::Cheddar::new().expect("could not read manifest")
-        .run_build("header.h");
+        .run_build("include/header.h");
 }
