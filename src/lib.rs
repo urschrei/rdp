@@ -7,8 +7,6 @@ use std::slice;
 use std::f64;
 
 extern crate libc;
-use self::libc::{c_void, size_t, c_double};
-
 extern crate num;
 use self::num::Float;
 
@@ -24,8 +22,8 @@ pub extern "C" fn spare() { println!(""); }
 /// A C-compatible `struct` used for passing arrays across the FFI boundary
 #[repr(C)]
 pub struct Array {
-    pub data: *const c_void,
-    pub len: size_t,
+    pub data: *const libc::c_void,
+    pub len: libc::size_t,
 }
 
 // Build an Array from a LineString, so it can be leaked across the FFI boundary
@@ -38,8 +36,8 @@ impl<T> From<LineString<T>> for Array
             .map(|p| [p.x(), p.y()])
             .collect();
         let array = Array {
-            data: v.as_ptr() as *const c_void,
-            len: v.len() as size_t,
+            data: v.as_ptr() as *const libc::c_void,
+            len: v.len() as libc::size_t,
         };
         mem::forget(v);
         array
@@ -70,7 +68,7 @@ impl From<Array> for Vec<[f64; 2]> {
 ///
 /// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
 #[no_mangle]
-pub extern "C" fn simplify_rdp_ffi(coords: Array, precision: c_double) -> Array {
+pub extern "C" fn simplify_rdp_ffi(coords: Array, precision: libc::c_double) -> Array {
     LineString(Vec::from(coords)
             .iter()
             .map(|i| Point::new(i[0], i[1]))
@@ -95,7 +93,7 @@ pub extern "C" fn simplify_rdp_ffi(coords: Array, precision: c_double) -> Array 
 ///
 /// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
 #[no_mangle]
-pub extern "C" fn simplify_visvalingam_ffi(coords: Array, precision: c_double) -> Array {
+pub extern "C" fn simplify_visvalingam_ffi(coords: Array, precision: libc::c_double) -> Array {
     LineString(Vec::from(coords)
             .iter()
             .map(|i| Point::new(i[0], i[1]))
