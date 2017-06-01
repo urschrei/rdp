@@ -78,7 +78,7 @@ before_deploy:
   - dumpbin /dependents target\%TARGET%\release\rdp.dll > dumpbin_dependents.txt
   - appveyor PushArtifact dumpbin_exports.txt
   - appveyor PushArtifact dumpbin_dependents.txt
-  - ps: ci\before_deploy.ps1
+  - ps: ci\before_deploy_windows.ps1
 
 deploy:
   appveyor_repo_tag: true
