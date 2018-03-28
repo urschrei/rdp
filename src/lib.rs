@@ -8,8 +8,8 @@ use std::f64;
 
 extern crate libc;
 
-extern crate num;
-use self::num::Float;
+extern crate num_traits;
+use self::num_traits::Float;
 
 extern crate geo;
 use self::geo::{Point, LineString};
@@ -121,7 +121,7 @@ mod tests {
     use super::{simplify_rdp_ffi, simplify_visvalingam_ffi, drop_float_array, Array};
     extern crate geo;
     use geo::{Point, LineString};
-    extern crate num;
+    extern crate num_traits;
     use std::ptr;
     #[test]
     fn test_linestring_to_array() {
