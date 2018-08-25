@@ -1,10 +1,12 @@
-#![doc(html_logo_url = "https://cdn.rawgit.com/urschrei/rdp/6c84264fd9cdc0b8fdf974fc98e51fea4834ed05/rdp.svg",
-       html_root_url = "https://urschrei.github.io/rdp/")]
+#![doc(
+    html_logo_url = "https://cdn.rawgit.com/urschrei/rdp/6c84264fd9cdc0b8fdf974fc98e51fea4834ed05/rdp.svg",
+    html_root_url = "https://urschrei.github.io/rdp/"
+)]
 //! This crate provides FFI functions for accessing the Ramer–Douglas–Peucker and Visvalingam-Whyatt line simplification algorithms
 
+use std::f64;
 use std::mem;
 use std::slice;
-use std::f64;
 
 extern crate libc;
 
@@ -12,13 +14,15 @@ extern crate num_traits;
 use self::num_traits::Float;
 
 extern crate geo;
-use self::geo::{Point, LineString};
-use self::geo::simplify::{Simplify};
-use self::geo::simplifyvw::{SimplifyVW};
+use self::geo::simplify::Simplify;
+use self::geo::simplifyvw::SimplifyVW;
+use self::geo::LineString;
 
 /// No-op function for ffi compatibility. Ignore this.
 #[allow(dead_code)]
-pub extern "C" fn spare() { println!(""); }
+pub extern "C" fn spare() {
+    println!("");
+}
 
 /// A C-compatible `struct` used for passing arrays across the FFI boundary
 #[repr(C)]
@@ -29,13 +33,11 @@ pub struct Array {
 
 // Build an Array from a LineString, so it can be leaked across the FFI boundary
 impl<T> From<LineString<T>> for Array
-    where T: Float
+where
+    T: Float,
 {
     fn from(sl: LineString<T>) -> Self {
-        let v: Vec<[T; 2]> = sl.0
-            .iter()
-            .map(|p| [p.x(), p.y()])
-            .collect();
+        let v: Vec<[T; 2]> = sl.0.iter().map(|p| [p.x, p.y]).collect();
         let array = Array {
             data: v.as_ptr() as *const libc::c_void,
             len: v.len() as libc::size_t,
@@ -70,12 +72,8 @@ impl From<Array> for Vec<[f64; 2]> {
 /// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
 #[no_mangle]
 pub extern "C" fn simplify_rdp_ffi(coords: Array, precision: libc::c_double) -> Array {
-    LineString(Vec::from(coords)
-            .iter()
-            .map(|i| Point::new(i[0], i[1]))
-            .collect())
-        .simplify(&precision)
-        .into()
+    let ls: LineString<_> = Vec::from(coords).into();
+    ls.simplify(&precision).into()
 }
 
 /// FFI wrapper for [`visvalingam`](fn.visvalingam.html)
@@ -95,12 +93,8 @@ pub extern "C" fn simplify_rdp_ffi(coords: Array, precision: libc::c_double) -> 
 /// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
 #[no_mangle]
 pub extern "C" fn simplify_visvalingam_ffi(coords: Array, precision: libc::c_double) -> Array {
-    LineString(Vec::from(coords)
-            .iter()
-            .map(|i| Point::new(i[0], i[1]))
-            .collect())
-        .simplifyvw(&precision)
-        .into()
+    let ls: LineString<_> = Vec::from(coords).into();
+    ls.simplifyvw(&precision).into()
 }
 
 /// Free Array memory which Rust has allocated across the FFI boundary by [`simplify_rdp_ffi`](fn.simplify_rdp_ffi.html)
@@ -118,41 +112,59 @@ pub extern "C" fn drop_float_array(arr: Array) {
 
 #[cfg(test)]
 mod tests {
-    use super::{simplify_rdp_ffi, simplify_visvalingam_ffi, drop_float_array, Array};
+    use super::{drop_float_array, simplify_rdp_ffi, simplify_visvalingam_ffi, Array};
     extern crate geo;
-    use geo::{Point, LineString};
+    use geo::{LineString, Point};
     extern crate num_traits;
     use std::ptr;
     #[test]
     fn test_linestring_to_array() {
-        let ls = LineString(vec![Point::new(1.0, 2.0), Point::new(3.0, 4.0)]);
+        let ls: LineString<_> = vec![Point::new(1.0, 2.0), Point::new(3.0, 4.0)].into();
         let _: Array = ls.into();
     }
     #[test]
     fn test_array_conversion() {
-        let original = vec![[0.0, 0.0], [5.0, 4.0], [11.0, 5.5], [17.3, 3.2], [27.8, 0.1]];
-        let ls = LineString(original.iter().map(|i| Point::new(i[0], i[1])).collect());
+        let original = vec![
+            [0.0, 0.0],
+            [5.0, 4.0],
+            [11.0, 5.5],
+            [17.3, 3.2],
+            [27.8, 0.1],
+        ];
+        let ls: LineString<_> = original.clone().into();
         // move into an Array, and leak it
         let arr: Array = ls.into();
         // move back into a Vec -- leaked value still needs to be dropped
         let converted: Vec<_> = arr.into();
         assert_eq!(converted, original);
         // drop it
-        let ls = LineString(converted.iter().map(|i| Point::new(i[0], i[1])).collect());
+        let ls: LineString<_> = converted.into();
         drop_float_array(ls.into());
     }
     #[test]
     fn test_ffi_rdp_simplification() {
-        let input = vec![[0.0, 0.0], [5.0, 4.0], [11.0, 5.5], [17.3, 3.2], [27.8, 0.1]];
-        let ls = LineString(input.iter().map(|i| Point::new(i[0], i[1])).collect());
+        let input = vec![
+            [0.0, 0.0],
+            [5.0, 4.0],
+            [11.0, 5.5],
+            [17.3, 3.2],
+            [27.8, 0.1],
+        ];
+        let ls: LineString<_> = input.into();
         let output = vec![[0.0, 0.0], [5.0, 4.0], [11.0, 5.5], [27.8, 0.1]];
         let transformed: Vec<_> = simplify_rdp_ffi(ls.into(), 1.0).into();
         assert_eq!(transformed, output);
     }
     #[test]
     fn test_ffi_visvalingam_simplification() {
-        let input = vec![[5.0, 2.0], [3.0, 8.0], [6.0, 20.0], [7.0, 25.0], [10.0, 10.0]];
-        let ls = LineString(input.iter().map(|i| Point::new(i[0], i[1])).collect());
+        let input = vec![
+            [5.0, 2.0],
+            [3.0, 8.0],
+            [6.0, 20.0],
+            [7.0, 25.0],
+            [10.0, 10.0],
+        ];
+        let ls: LineString<_> = input.into();
         let output = vec![[5.0, 2.0], [7.0, 25.0], [10.0, 10.0]];
         let transformed: Vec<_> = simplify_visvalingam_ffi(ls.into(), 30.0).into();
         assert_eq!(transformed, output);
@@ -160,7 +172,7 @@ mod tests {
     #[test]
     fn test_drop_empty_float_array() {
         let original = vec![[1.0, 2.0], [3.0, 4.0]];
-        let ls = LineString(original.iter().map(|i| Point::new(i[0], i[1])).collect());
+        let ls: LineString<_> = original.into();
         // move into an Array, and leak it
         let mut arr: Array = ls.into();
         // zero Array contents
