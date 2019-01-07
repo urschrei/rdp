@@ -1,6 +1,6 @@
 [package]
 name = "rdp"
-version = "0.4.0"
+version = "0.5.0"
 authors = ["Stephan Hügel <urschrei@gmail.com>"]
 description = "A Rust implementation of the Ramer–Douglas–Peucker and Visvalingam-Whyatt algorithms"
 readme = "README.md"
@@ -11,9 +11,9 @@ license = "MIT"
 # build = "src/build.rs"
 
 [dependencies]
-libc = "0.2.40"
-geo = "0.10.0"
-num-traits = "0.2.2"
+libc = "0.2.46"
+geo = "0.11.0"
+num-traits = "0.2.6"
 
 [build-dependencies]
 moz-cheddar = "0.4.0"
@@ -27,3 +27,4 @@ doc = true
 
 [profile.release]
 lto = true
+codegen-units = 1

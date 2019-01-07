@@ -16,6 +16,7 @@ use self::num_traits::Float;
 extern crate geo;
 use self::geo::simplify::Simplify;
 use self::geo::simplifyvw::SimplifyVW;
+use self::geo::simplifyvw::SimplifyVWPreserve;
 use self::geo::LineString;
 
 /// No-op function for ffi compatibility. Ignore this.
@@ -97,6 +98,27 @@ pub extern "C" fn simplify_visvalingam_ffi(coords: Array, precision: libc::c_dou
     ls.simplifyvw(&precision).into()
 }
 
+/// FFI wrapper for [`topology-preserving visvalingam`](fn.visvalingam_preserve.html)
+///
+/// Callers must pass two arguments:
+///
+/// - a [Struct](struct.Array.html) with two fields:
+///     - `data`, a void pointer to an array of floating-point point coordinates: `[[1.0, 2.0], ...]`
+///     - `len`, the length of the array being passed. Its type must be `size_t`
+/// - a double-precision `float` for the epsilon
+///
+/// Implementations calling this function **must** call [`drop_float_array`](fn.drop_float_array.html)
+/// with the returned `Array` pointer, in order to free the memory it allocates.
+///
+/// # Safety
+///
+/// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
+#[no_mangle]
+pub extern "C" fn simplify_visvalingamp_ffi(coords: Array, precision: libc::c_double) -> Array {
+    let ls: LineString<_> = Vec::from(coords).into();
+    ls.simplifyvw_preserve(&precision).into()
+}
+
 /// Free Array memory which Rust has allocated across the FFI boundary by [`simplify_rdp_ffi`](fn.simplify_rdp_ffi.html)
 ///
 /// # Safety
@@ -112,7 +134,7 @@ pub extern "C" fn drop_float_array(arr: Array) {
 
 #[cfg(test)]
 mod tests {
-    use super::{drop_float_array, simplify_rdp_ffi, simplify_visvalingam_ffi, Array};
+    use super::*;
     extern crate geo;
     use geo::{LineString, Point};
     extern crate num_traits;
@@ -167,6 +189,20 @@ mod tests {
         let ls: LineString<_> = input.into();
         let output = vec![[5.0, 2.0], [7.0, 25.0], [10.0, 10.0]];
         let transformed: Vec<_> = simplify_visvalingam_ffi(ls.into(), 30.0).into();
+        assert_eq!(transformed, output);
+    }
+    #[test]
+    fn test_ffi_visvalingamp_simplification() {
+        let input = vec![
+            [5.0, 2.0],
+            [3.0, 8.0],
+            [6.0, 20.0],
+            [7.0, 25.0],
+            [10.0, 10.0],
+        ];
+        let ls: LineString<_> = input.into();
+        let output = vec![[5.0, 2.0], [7.0, 25.0], [10.0, 10.0]];
+        let transformed: Vec<_> = simplify_visvalingamp_ffi(ls.into(), 30.0).into();
         assert_eq!(transformed, output);
     }
     #[test]
