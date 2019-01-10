@@ -8,7 +8,7 @@ keywords = ["geo", "Ramer", "Douglas-Peucker", "Visvalingam-Whyatt"]
 repository = "https://github.com/urschrei/rdp"
 license = "MIT"
 # we only need to run this if the public API changes
-# build = "src/build.rs"
+build = "src/build.rs"
 
 [dependencies]
 libc = "0.2.46"
@@ -16,7 +16,7 @@ geo = "0.11.0"
 num-traits = "0.2.6"
 
 [build-dependencies]
-moz-cheddar = "0.4.0"
+cbindgen = "0.6.8"
 
 [lib]
 name = "rdp"
