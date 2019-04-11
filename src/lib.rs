@@ -22,7 +22,7 @@ use geo;
 /// No-op function for ffi compatibility. Ignore this.
 #[allow(dead_code)]
 pub extern "C" fn spare() {
-    println!("");
+    println!();
 }
 
 /// A C-compatible `struct` used for passing arrays across the FFI boundary
