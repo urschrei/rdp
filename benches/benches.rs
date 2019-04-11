@@ -1,6 +1,6 @@
 use criterion::{criterion_group, criterion_main, Criterion};
 use geo::simplify::Simplify;
-use geo::simplifyvw::SimplifyVW;
+use geo::simplifyvw::{SimplifyVW, SimplifyVWPreserve};
 use geo_types::LineString;
 
 fn bench_rdp(c: &mut Criterion) {
@@ -43,11 +43,22 @@ fn bench_visvalingam_long(c: &mut Criterion) {
     });
 }
 
+fn bench_visvalingamp_long(c: &mut Criterion) {
+    c.bench_function("bench_visvalingamp_long", |b| {
+        let points = include!("../src/mk_route_long.rs");
+        let ls: LineString<f64> = points.into();
+        b.iter(|| {
+            ls.simplifyvw_preserve(&0.0000075);
+        });
+    });
+}
+
 criterion_group!(
     benches,
     bench_rdp,
     bench_visvalingam,
     bench_rdp_long,
-    bench_visvalingam_long
+    bench_visvalingam_long,
+    bench_visvalingamp_long
 );
 criterion_main!(benches);
