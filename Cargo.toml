@@ -7,13 +7,18 @@ readme = "README.md"
 keywords = ["geo", "Ramer", "Douglas-Peucker", "Visvalingam-Whyatt"]
 repository = "https://github.com/urschrei/rdp"
 license = "MIT"
+edition = "2018"
 # we only need to run this if the public API changes
 build = "src/build.rs"
 
 [dependencies]
 libc = "0.2.46"
-geo = "0.11.0"
+geo = "0.12.0"
+geo-types = "0.4.2"
 num-traits = "0.2.6"
+
+[dev-dependencies]
+criterion = "0.2"
 
 [build-dependencies]
 cbindgen = "0.6.8"
@@ -28,3 +33,7 @@ doc = true
 [profile.release]
 lto = true
 codegen-units = 1
+
+[[bench]]
+name = "benches"
+harness = false

@@ -8,16 +8,16 @@ use std::f64;
 use std::mem;
 use std::slice;
 
-extern crate libc;
+use libc;
 
-extern crate num_traits;
 use self::num_traits::Float;
+use num_traits;
 
-extern crate geo;
 use self::geo::simplify::Simplify;
 use self::geo::simplifyvw::SimplifyVW;
 use self::geo::simplifyvw::SimplifyVWPreserve;
 use self::geo::LineString;
+use geo;
 
 /// No-op function for ffi compatibility. Ignore this.
 #[allow(dead_code)]
@@ -135,9 +135,9 @@ pub extern "C" fn drop_float_array(arr: Array) {
 #[cfg(test)]
 mod tests {
     use super::*;
-    extern crate geo;
+    use geo;
     use geo::{LineString, Point};
-    extern crate num_traits;
+
     use std::ptr;
     #[test]
     fn test_linestring_to_array() {
