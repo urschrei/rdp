@@ -256,6 +256,21 @@ mod tests {
         assert_eq!(transformed, output);
     }
     #[test]
+    fn test_ffi_rdp_idx_simplification() {
+        let input = vec![
+            [0.0, 0.0],
+            [5.0, 4.0],
+            [11.0, 5.5],
+            [17.3, 3.2],
+            [27.8, 0.1],
+        ];
+        let ls: LineString<_> = input.into();
+        // let output = vec![[0.0, 0.0], [5.0, 4.0], [11.0, 5.5], [27.8, 0.1]];
+        let output = vec![0, 1, 2, 4];
+        let transformed: Vec<usize> = simplify_rdp_idx_ffi(ls.into(), 1.0).into();
+        assert_eq!(transformed, output);
+    }
+    #[test]
     fn test_ffi_visvalingam_simplification() {
         let input = vec![
             [5.0, 2.0],
@@ -267,6 +282,21 @@ mod tests {
         let ls: LineString<_> = input.into();
         let output = vec![[5.0, 2.0], [7.0, 25.0], [10.0, 10.0]];
         let transformed: Vec<[f64; 2]> = simplify_visvalingam_ffi(ls.into(), 30.0).into();
+        assert_eq!(transformed, output);
+    }
+    #[test]
+    fn test_ffi_visvalingam_idx_simplification() {
+        let input = vec![
+            [5.0, 2.0],
+            [3.0, 8.0],
+            [6.0, 20.0],
+            [7.0, 25.0],
+            [10.0, 10.0],
+        ];
+        let ls: LineString<_> = input.into();
+        // let output = vec![[5.0, 2.0], [7.0, 25.0], [10.0, 10.0]];
+        let output = vec![0, 3, 4];
+        let transformed: Vec<usize> = simplify_visvalingam_idx_ffi(ls.into(), 30.0).into();
         assert_eq!(transformed, output);
     }
     #[test]
