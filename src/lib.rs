@@ -13,9 +13,8 @@ use libc;
 use self::num_traits::Float;
 use num_traits;
 
-use self::geo::simplify::Simplify;
-use self::geo::simplifyvw::SimplifyVW;
-use self::geo::simplifyvw::SimplifyVWPreserve;
+use self::geo::simplify::{Simplify, SimplifyIdx};
+use self::geo::simplifyvw::{SimplifyVW, SimplifyVWPreserve, SimplifyVwIdx};
 use self::geo::LineString;
 use geo;
 
@@ -48,7 +47,19 @@ where
     }
 }
 
-// Build a Vec from an Array
+// Build an Array from a vec of usize, so it can be leaked across the FFI boundary
+impl From<Vec<usize>> for Array {
+    fn from(v: Vec<usize>) -> Self {
+        let array = Array {
+            data: v.as_ptr() as *const libc::c_void,
+            len: v.len() as libc::size_t,
+        };
+        mem::forget(v);
+        array
+    }
+}
+
+// Build a 2D Vec from an Array
 // Ideally this would be a LineString, but local types blah blah
 impl From<Array> for Vec<[f64; 2]> {
     fn from(arr: Array) -> Self {
@@ -56,7 +67,14 @@ impl From<Array> for Vec<[f64; 2]> {
     }
 }
 
-/// FFI wrapper for [`rdp`](fn.rdp.html)
+// Build a Vec of usize from an Array
+impl From<Array> for Vec<usize> {
+    fn from(arr: Array) -> Self {
+        unsafe { slice::from_raw_parts(arr.data as *mut usize, arr.len).to_vec() }
+    }
+}
+
+/// FFI wrapper for RDP, returning simplified geometry **coordinates**
 ///
 /// Callers must pass two arguments:
 ///
@@ -73,11 +91,34 @@ impl From<Array> for Vec<[f64; 2]> {
 /// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
 #[no_mangle]
 pub extern "C" fn simplify_rdp_ffi(coords: Array, precision: libc::c_double) -> Array {
-    let ls: LineString<_> = Vec::from(coords).into();
+    let v: Vec<[f64; 2]> = Vec::from(coords);
+    let ls: LineString<_> = v.into();
     ls.simplify(&precision).into()
 }
 
-/// FFI wrapper for [`visvalingam`](fn.visvalingam.html)
+/// FFI wrapper for RDP, returning simplified geometry **indices**
+///
+/// Callers must pass two arguments:
+///
+/// - a [Struct](struct.Array.html) with two fields:
+///     - `data`, a void pointer to an array of floating-point point coordinates: `[[1.0, 2.0], ...]`
+///     - `len`, the length of the array being passed. Its type must be `size_t`
+/// - a double-precision `float` for the tolerance
+///
+/// Implementations calling this function **must** call [`drop_usize_array`](fn.drop_usize_array.html)
+/// with the returned `Array` pointer, in order to free the memory it allocates.
+///
+/// # Safety
+///
+/// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
+#[no_mangle]
+pub extern "C" fn simplify_rdp_idx_ffi(coords: Array, precision: libc::c_double) -> Array {
+    let v: Vec<[f64; 2]> = Vec::from(coords);
+    let ls: LineString<_> = v.into();
+    ls.simplify_idx(&precision).into()
+}
+
+/// FFI wrapper for Visvalingam-Whyatt, returning simplified geometry **coordinates**
 ///
 /// Callers must pass two arguments:
 ///
@@ -94,8 +135,31 @@ pub extern "C" fn simplify_rdp_ffi(coords: Array, precision: libc::c_double) -> 
 /// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
 #[no_mangle]
 pub extern "C" fn simplify_visvalingam_ffi(coords: Array, precision: libc::c_double) -> Array {
-    let ls: LineString<_> = Vec::from(coords).into();
+    let v: Vec<[f64; 2]> = Vec::from(coords);
+    let ls: LineString<_> = v.into();
     ls.simplifyvw(&precision).into()
+}
+
+/// FFI wrapper for Visvalingam-Whyatt, returning simplified geometry **indices**
+///
+/// Callers must pass two arguments:
+///
+/// - a [Struct](struct.Array.html) with two fields:
+///     - `data`, a void pointer to an array of floating-point point coordinates: `[[1.0, 2.0], ...]`
+///     - `len`, the length of the array being passed. Its type must be `size_t`
+/// - a double-precision `float` for the epsilon
+///
+/// Implementations calling this function **must** call [`drop_usize_array`](fn.drop_usize_array.html)
+/// with the returned `Array` pointer, in order to free the memory it allocates.
+///
+/// # Safety
+///
+/// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
+#[no_mangle]
+pub extern "C" fn simplify_visvalingam_idx_ffi(coords: Array, precision: libc::c_double) -> Array {
+    let v: Vec<[f64; 2]> = Vec::from(coords);
+    let ls: LineString<_> = v.into();
+    ls.simplifyvw_idx(&precision).into()
 }
 
 /// FFI wrapper for [`topology-preserving visvalingam`](fn.visvalingam_preserve.html)
@@ -115,11 +179,12 @@ pub extern "C" fn simplify_visvalingam_ffi(coords: Array, precision: libc::c_dou
 /// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
 #[no_mangle]
 pub extern "C" fn simplify_visvalingamp_ffi(coords: Array, precision: libc::c_double) -> Array {
-    let ls: LineString<_> = Vec::from(coords).into();
+    let v: Vec<[f64; 2]> = Vec::from(coords);
+    let ls: LineString<_> = v.into();
     ls.simplifyvw_preserve(&precision).into()
 }
 
-/// Free Array memory which Rust has allocated across the FFI boundary by [`simplify_rdp_ffi`](fn.simplify_rdp_ffi.html)
+/// Free Array memory of 2D floats which Rust has allocated across the FFI boundary by [`simplify_rdp_ffi`](fn.simplify_rdp_ffi.html)
 ///
 /// # Safety
 ///
@@ -129,7 +194,20 @@ pub extern "C" fn drop_float_array(arr: Array) {
     if arr.data.is_null() {
         return;
     }
-    let _: Vec<_> = arr.into();
+    let _: Vec<[f64; 2]> = arr.into();
+}
+
+/// Free Array memory of usize which Rust has allocated across the FFI boundary by [`simplify_rdp_ffi`](fn.simplify_rdp_ffi.html)
+///
+/// # Safety
+///
+/// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
+#[no_mangle]
+pub extern "C" fn drop_usize_array(arr: Array) {
+    if arr.data.is_null() {
+        return;
+    }
+    let _: Vec<usize> = arr.into();
 }
 
 #[cfg(test)]
@@ -157,7 +235,7 @@ mod tests {
         // move into an Array, and leak it
         let arr: Array = ls.into();
         // move back into a Vec -- leaked value still needs to be dropped
-        let converted: Vec<_> = arr.into();
+        let converted: Vec<[f64; 2]> = arr.into();
         assert_eq!(converted, original);
         // drop it
         let ls: LineString<_> = converted.into();
@@ -174,7 +252,7 @@ mod tests {
         ];
         let ls: LineString<_> = input.into();
         let output = vec![[0.0, 0.0], [5.0, 4.0], [11.0, 5.5], [27.8, 0.1]];
-        let transformed: Vec<_> = simplify_rdp_ffi(ls.into(), 1.0).into();
+        let transformed: Vec<[f64; 2]> = simplify_rdp_ffi(ls.into(), 1.0).into();
         assert_eq!(transformed, output);
     }
     #[test]
@@ -188,7 +266,7 @@ mod tests {
         ];
         let ls: LineString<_> = input.into();
         let output = vec![[5.0, 2.0], [7.0, 25.0], [10.0, 10.0]];
-        let transformed: Vec<_> = simplify_visvalingam_ffi(ls.into(), 30.0).into();
+        let transformed: Vec<[f64; 2]> = simplify_visvalingam_ffi(ls.into(), 30.0).into();
         assert_eq!(transformed, output);
     }
     #[test]
@@ -202,7 +280,7 @@ mod tests {
         ];
         let ls: LineString<_> = input.into();
         let output = vec![[5.0, 2.0], [7.0, 25.0], [10.0, 10.0]];
-        let transformed: Vec<_> = simplify_visvalingamp_ffi(ls.into(), 30.0).into();
+        let transformed: Vec<[f64; 2]> = simplify_visvalingamp_ffi(ls.into(), 30.0).into();
         assert_eq!(transformed, output);
     }
     #[test]

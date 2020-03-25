@@ -16,7 +16,7 @@ typedef struct Array {
 } Array;
 
 /**
- * Free Array memory which Rust has allocated across the FFI boundary by [`simplify_rdp_ffi`](fn.simplify_rdp_ffi.html)
+ * Free Array memory of 2D floats which Rust has allocated across the FFI boundary by [`simplify_rdp_ffi`](fn.simplify_rdp_ffi.html)
  *
  * # Safety
  *
@@ -25,7 +25,16 @@ typedef struct Array {
 void drop_float_array(Array arr);
 
 /**
- * FFI wrapper for [`rdp`](fn.rdp.html)
+ * Free Array memory of usize which Rust has allocated across the FFI boundary by [`simplify_rdp_ffi`](fn.simplify_rdp_ffi.html)
+ *
+ * # Safety
+ *
+ * This function is unsafe because it accesses a raw pointer which could contain arbitrary data
+ */
+void drop_usize_array(Array arr);
+
+/**
+ * FFI wrapper for RDP, returning simplified geometry **coordinates**
  *
  * Callers must pass two arguments:
  *
@@ -45,7 +54,27 @@ Array simplify_rdp_ffi(Array coords,
                        double precision);
 
 /**
- * FFI wrapper for [`visvalingam`](fn.visvalingam.html)
+ * FFI wrapper for RDP, returning simplified geometry **indices**
+ *
+ * Callers must pass two arguments:
+ *
+ * - a [Struct](struct.Array.html) with two fields:
+ *     - `data`, a void pointer to an array of floating-point point coordinates: `[[1.0, 2.0], ...]`
+ *     - `len`, the length of the array being passed. Its type must be `size_t`
+ * - a double-precision `float` for the tolerance
+ *
+ * Implementations calling this function **must** call [`drop_usize_array`](fn.drop_usize_array.html)
+ * with the returned `Array` pointer, in order to free the memory it allocates.
+ *
+ * # Safety
+ *
+ * This function is unsafe because it accesses a raw pointer which could contain arbitrary data
+ */
+Array simplify_rdp_idx_ffi(Array coords,
+                           double precision);
+
+/**
+ * FFI wrapper for Visvalingam-Whyatt, returning simplified geometry **coordinates**
  *
  * Callers must pass two arguments:
  *
@@ -63,6 +92,26 @@ Array simplify_rdp_ffi(Array coords,
  */
 Array simplify_visvalingam_ffi(Array coords,
                                double precision);
+
+/**
+ * FFI wrapper for Visvalingam-Whyatt, returning simplified geometry **indices**
+ *
+ * Callers must pass two arguments:
+ *
+ * - a [Struct](struct.Array.html) with two fields:
+ *     - `data`, a void pointer to an array of floating-point point coordinates: `[[1.0, 2.0], ...]`
+ *     - `len`, the length of the array being passed. Its type must be `size_t`
+ * - a double-precision `float` for the epsilon
+ *
+ * Implementations calling this function **must** call [`drop_usize_array`](fn.drop_usize_array.html)
+ * with the returned `Array` pointer, in order to free the memory it allocates.
+ *
+ * # Safety
+ *
+ * This function is unsafe because it accesses a raw pointer which could contain arbitrary data
+ */
+Array simplify_visvalingam_idx_ffi(Array coords,
+                                   double precision);
 
 /**
  * FFI wrapper for [`topology-preserving visvalingam`](fn.visvalingam_preserve.html)
