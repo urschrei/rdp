@@ -18,12 +18,6 @@ use self::geo::simplifyvw::{SimplifyVW, SimplifyVWPreserve, SimplifyVwIdx};
 use self::geo::LineString;
 use geo;
 
-/// No-op function for ffi compatibility. Ignore this.
-#[allow(dead_code)]
-pub extern "C" fn spare() {
-    println!();
-}
-
 /// A C-compatible `struct` used for passing arrays across the FFI boundary
 #[repr(C)]
 pub struct Array {
