@@ -9,7 +9,7 @@ main() {
         return
     fi
 
-    cross test --target $TARGET --features=headers
+    cross test --target $TARGET
 }
 
 # we don't run the "test phase" when doing deploys
