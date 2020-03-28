@@ -23,7 +23,7 @@ main() {
     fi
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
         # TODO Update this to build the artifacts that matter to you
-        RUSTFLAGS='-C rpath' cross rustc --target --features=headers $TARGET --release
+        RUSTFLAGS='-C rpath' cross rustc --target $TARGET --features=headers --release
         for lib in target/$TARGET/release/*.dylib; do
             strip -ur $lib
         done
