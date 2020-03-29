@@ -156,7 +156,7 @@ pub extern "C" fn simplify_visvalingam_idx_ffi(coords: Array, precision: libc::c
     ls.simplifyvw_idx(&precision).into()
 }
 
-/// FFI wrapper for [`topology-preserving visvalingam`](fn.visvalingam_preserve.html)
+/// FFI wrapper for topology-preserving Visvalingam-Whyatt, returning simplified geometry **coordinates**.
 ///
 /// Callers must pass two arguments:
 ///
@@ -178,7 +178,10 @@ pub extern "C" fn simplify_visvalingamp_ffi(coords: Array, precision: libc::c_do
     ls.simplifyvw_preserve(&precision).into()
 }
 
-/// Free Array memory of 2D floats which Rust has allocated across the FFI boundary by [`simplify_rdp_ffi`](fn.simplify_rdp_ffi.html)
+/// Free memory which has been allocated across the FFI boundary by:
+/// - simplify_rdp_ffi
+/// - simplify_visvalingam_ffi
+/// - simplify_visvalingamp_ffi
 ///
 /// # Safety
 ///
@@ -191,7 +194,9 @@ pub extern "C" fn drop_float_array(arr: Array) {
     let _: Vec<[f64; 2]> = arr.into();
 }
 
-/// Free Array memory of usize which Rust has allocated across the FFI boundary by [`simplify_rdp_ffi`](fn.simplify_rdp_ffi.html)
+/// Free memory which has been allocated across the FFI boundary by:
+/// - simplify_rdp_idx_ffi
+/// - simplify_visvalingam_idx_ffi
 ///
 /// # Safety
 ///
