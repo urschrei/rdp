@@ -85,8 +85,7 @@ impl From<Array> for Vec<usize> {
 /// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
 #[no_mangle]
 pub extern "C" fn simplify_rdp_ffi(coords: Array, precision: libc::c_double) -> Array {
-    let v: Vec<[f64; 2]> = Vec::from(coords);
-    let ls: LineString<_> = v.into();
+    let ls: LineString<_> = Into::<Vec<[f64; 2]>>::into(coords).into();
     ls.simplify(&precision).into()
 }
 
@@ -107,8 +106,7 @@ pub extern "C" fn simplify_rdp_ffi(coords: Array, precision: libc::c_double) -> 
 /// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
 #[no_mangle]
 pub extern "C" fn simplify_rdp_idx_ffi(coords: Array, precision: libc::c_double) -> Array {
-    let v: Vec<[f64; 2]> = Vec::from(coords);
-    let ls: LineString<_> = v.into();
+    let ls: LineString<_> = Into::<Vec<[f64; 2]>>::into(coords).into();
     ls.simplify_idx(&precision).into()
 }
 
@@ -129,8 +127,7 @@ pub extern "C" fn simplify_rdp_idx_ffi(coords: Array, precision: libc::c_double)
 /// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
 #[no_mangle]
 pub extern "C" fn simplify_visvalingam_ffi(coords: Array, precision: libc::c_double) -> Array {
-    let v: Vec<[f64; 2]> = Vec::from(coords);
-    let ls: LineString<_> = v.into();
+    let ls: LineString<_> = Into::<Vec<[f64; 2]>>::into(coords).into();
     ls.simplifyvw(&precision).into()
 }
 
@@ -151,8 +148,7 @@ pub extern "C" fn simplify_visvalingam_ffi(coords: Array, precision: libc::c_dou
 /// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
 #[no_mangle]
 pub extern "C" fn simplify_visvalingam_idx_ffi(coords: Array, precision: libc::c_double) -> Array {
-    let v: Vec<[f64; 2]> = Vec::from(coords);
-    let ls: LineString<_> = v.into();
+    let ls: LineString<_> = Into::<Vec<[f64; 2]>>::into(coords).into();
     ls.simplifyvw_idx(&precision).into()
 }
 
@@ -173,8 +169,7 @@ pub extern "C" fn simplify_visvalingam_idx_ffi(coords: Array, precision: libc::c
 /// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
 #[no_mangle]
 pub extern "C" fn simplify_visvalingamp_ffi(coords: Array, precision: libc::c_double) -> Array {
-    let v: Vec<[f64; 2]> = Vec::from(coords);
-    let ls: LineString<_> = v.into();
+    let ls: LineString<_> = Into::<Vec<[f64; 2]>>::into(coords).into();
     ls.simplifyvw_preserve(&precision).into()
 }
 
