@@ -16,7 +16,10 @@ typedef struct Array {
 } Array;
 
 /**
- * Free Array memory of 2D floats which Rust has allocated across the FFI boundary by [`simplify_rdp_ffi`](fn.simplify_rdp_ffi.html)
+ * Free memory which has been allocated across the FFI boundary by:
+ * - simplify_rdp_ffi
+ * - simplify_visvalingam_ffi
+ * - simplify_visvalingamp_ffi
  *
  * # Safety
  *
@@ -25,7 +28,9 @@ typedef struct Array {
 void drop_float_array(Array arr);
 
 /**
- * Free Array memory of usize which Rust has allocated across the FFI boundary by [`simplify_rdp_ffi`](fn.simplify_rdp_ffi.html)
+ * Free memory which has been allocated across the FFI boundary by:
+ * - simplify_rdp_idx_ffi
+ * - simplify_visvalingam_idx_ffi
  *
  * # Safety
  *
@@ -114,7 +119,7 @@ Array simplify_visvalingam_idx_ffi(Array coords,
                                    double precision);
 
 /**
- * FFI wrapper for [`topology-preserving visvalingam`](fn.visvalingam_preserve.html)
+ * FFI wrapper for topology-preserving Visvalingam-Whyatt, returning simplified geometry **coordinates**.
  *
  * Callers must pass two arguments:
  *
