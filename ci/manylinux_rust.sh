@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
 
-export CRATE_NAME=rdp
+export CRATE_NAME=lonlat_bng
 # we pass {TRAVIS_TAG} into Docker from Travis
 export TARGET=x86_64-unknown-linux-gnu
 
@@ -21,7 +21,7 @@ install_rustup() {
 # Generate artefacts for release
 mk_artifacts() {
     ls $HOME/.cargo/bin
-    RUSTFLAGS='-C rpath' cargo build --manifest-path=/io/Cargo.toml --features=headers --target $TARGET --release
+    RUSTFLAGS='-C target-cpu=native' cargo build --manifest-path=/io/Cargo.toml --target $TARGET --release
 }
 
 mk_tarball() {
@@ -36,8 +36,8 @@ mk_tarball() {
     done
 
     cp /io/target/$TARGET/release/*.so $td
-    cp -r /io/target/$TARGET/release/*.dSYM $td 2>/dev/null || :
     cp /io/include/header.h $td
+    cp -r /io/target/$TARGET/release/*.dSYM $td 2>/dev/null || :
 
     pushd $td
     # release tarball will look like 'rust-everywhere-v1.2.3-x86_64-unknown-linux-gnu.tar.gz'
