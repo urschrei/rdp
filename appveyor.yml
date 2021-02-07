@@ -102,7 +102,7 @@ cache:
 branches:
   only:
     - master
-    - /v\d\.\d\.\d/
+    - /v\d+\.\d+\.\d+/
 
 # Building is done in the test phase, so we disable Appveyor's build phase.
 build: false
