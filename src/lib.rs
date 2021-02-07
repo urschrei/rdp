@@ -10,13 +10,10 @@ use std::slice;
 
 use libc;
 
-use self::num_traits::Float;
-use num_traits;
-
 use self::geo::simplify::{Simplify, SimplifyIdx};
 use self::geo::simplifyvw::{SimplifyVW, SimplifyVWPreserve, SimplifyVwIdx};
 use self::geo::LineString;
-use geo;
+use geo::{self, CoordFloat};
 
 /// A C-compatible `struct` used for passing arrays across the FFI boundary
 #[repr(C)]
@@ -28,7 +25,7 @@ pub struct Array {
 // Build an Array from a LineString, so it can be leaked across the FFI boundary
 impl<T> From<LineString<T>> for Array
 where
-    T: Float,
+    T: CoordFloat,
 {
     fn from(sl: LineString<T>) -> Self {
         let v: Vec<[T; 2]> = sl.0.iter().map(|p| [p.x, p.y]).collect();
