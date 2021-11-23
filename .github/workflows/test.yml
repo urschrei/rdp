@@ -1,6 +1,7 @@
 on: [push, pull_request]
 env:
   RUSTFLAGS: -C rpath
+  cratename: rdp
 
 name: Test and Cross-compile
 
