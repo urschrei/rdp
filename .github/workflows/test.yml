@@ -17,7 +17,22 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        include:
+        - build: linux
+          os: ubuntu-latest
+          rust: stable
+          target: x86_64-unknown-linux-gnu
+          use-cross: true
+        - build: macos
+          os: macos-latest
+          rust: stable
+          target: x86_64-apple-darwin
+          use-cross: false
+        - build: windows
+          os: windows-latest
+          rust: stable
+          target: x86_64-pc-windows-msvc
+          use-cross: false
     steps:
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
@@ -26,7 +41,7 @@ jobs:
           target: ${{ matrix.target }}
       - uses: actions-rs/cargo@v1
         with:
-          use-cross: true
+          use-cross: ${{ matrix.use-cross }}
           command: build
           args: --release --target=${{ matrix.target }}
       - name: Zip Assets
