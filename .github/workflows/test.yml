@@ -1,46 +1,77 @@
 on: [push, pull_request]
+
+defaults:
+  run:
+    shell: bash
+
 env:
-  RUSTFLAGS: -C rpath
   cratename: rdp
 
 name: Test and Cross-compile
 
 jobs:
-  build_linux_cross:
-    name: Build Linux
-    runs-on: ubuntu-latest
+  build_windows_macos:
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
-        target:
-          - x86_64-unknown-linux-gnu
+        os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
           target: ${{ matrix.target }}
-          override: true
       - uses: actions-rs/cargo@v1
         with:
           use-cross: true
           command: build
           args: --release --target=${{ matrix.target }}
+      - name: Zip Assets
+        run: |
+          src=$(pwd)
+          stage=
+          case $RUNNER_OS in
+              Linux)
+                  stage=$(mktemp -d)
+                  ;;
+              macOS)
+                  stage=$(mktemp -d -t tmp)
+                  ;;
+              Windows)
+                  stage=$(mktemp -d)
+                  ;;
+          esac
+          if [ "$RUNNER_OS" == "Linux" ]; then
+            for lib in target/${{ matrix.target }}/release/*.so; do
+                strip -s $lib
+            done
+            cp include/header.h $stage
+          fi
+          if [ "$RUNNER_OS" == "macOS" ]; then
+            for lib in target/${{ matrix.target }}/release/*.dylib; do
+                strip -ur $lib
+            done
+            cp include/header.h $stage
+          fi
+          if [ "$RUNNER_OS" == "Windows" ]; then
+            cp target/${{ matrix.target }}/release/deps/${{ env.cratename }}.dll.lib target/${{ matrix.target }}/release/deps/${{ env.cratename }}.lib
+          fi
+          cp target/${{ matrix.target }}/release/${{ env.cratename }} $stage/
+          cd $stage
+          RELEASE_VERSION=${GITHUB_REF#refs/tags/}
+          ASSET_NAME="${{ env.cratename }}-$RELEASE_VERSION-${{ matrix.target }}.tar.gz"
+          ASSET_PATH="$src/$ASSET_NAME"
+          echo "ASSET_PATH=$ASSET_PATH" >> $GITHUB_ENV
+          tar czf $ASSET_PATH *
+          cd $src
 
-  build_windows_macos:
-    name: Build {{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [macos-latest, windows-latest]
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
+      - name: Release
+        uses: softprops/action-gh-release@v1
         with:
-          toolchain: stable
-          target: ${{ matrix.target }}
-      - uses: actions-rs/cargo@v1
-        with:
-          use-cross: false
-          command: build
-          args: --release
+          files: |
+            ${{ env.ASSET_PATH }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
