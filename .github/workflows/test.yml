@@ -27,7 +27,7 @@ jobs:
 
   build_windows_macos:
     name: Build {{ matrix.os }}
-    runs-on: [macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
