@@ -1,4 +1,6 @@
 on: [push, pull_request]
+env:
+  RUSTFLAGS: -C rpath
 
 name: Test and Cross-compile
 
@@ -21,7 +23,7 @@ jobs:
         with:
           use-cross: true
           command: build
-          args: --release --target=${{ matrix.target }} -C rpath
+          args: --release --target=${{ matrix.target }}
 
   build_windows_macos:
     name: Build {{ matrix.os }}
@@ -40,4 +42,4 @@ jobs:
         with:
           use-cross: false
           command: build
-          args: --release -C rpath
+          args: --release
