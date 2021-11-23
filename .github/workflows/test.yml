@@ -3,7 +3,7 @@ on: [push, pull_request]
 name: Test and Cross-compile
 
 jobs:
-  - build:
+  build_linux_cross:
     name: Build Linux
     runs-on: ubuntu-latest
     strategy:
@@ -22,7 +22,8 @@ jobs:
           use-cross: true
           command: build
           args: --release --target=${{ matrix.target }} -C rpath
-  - build:
+
+  build_windows_macos:
     name: Build {{ matrix.os }}
     runs-on: [macos-latest, windows-latest]
     strategy:
