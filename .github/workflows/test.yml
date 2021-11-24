@@ -122,6 +122,8 @@ jobs:
           RELEASE_VERSION=${GITHUB_REF#refs/tags/}
           if [ "$RUNNER_OS" == "Windows" ]; then
             ASSET_PATH="$src\$ASSET_NAME"
+            echo $ASSET_PATH
+            echo $GITHUB_ACTION_PATH
             7z a $ASSET_PATH *
           else
             ASSET_PATH="$src/$ASSET_NAME"
