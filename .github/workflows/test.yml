@@ -80,7 +80,7 @@ jobs:
           use-cross: ${{ matrix.use-cross }}
           command: build
           args: --release --target=${{ matrix.target }}
-      - name: Zip Assets
+      - name: Gather Assets
         run: |
           src=$(pwd)
           stage=
@@ -125,8 +125,8 @@ jobs:
             cp target/${{ matrix.target }}/release/${{ env.cratename }}* $stage/
             cp target/${{ matrix.target }}/release/deps/${{ env.cratename }}* $stage/
             rm $stage/*.pdb
-            ls $stage
           fi
+          ls $stage
           cd $src
 
       - name: Create macOS and Linux Archive
@@ -135,7 +135,7 @@ jobs:
           pushd ${{ env.STAGE }}
           tar -czf "${{ env.ASSET_NAME }}.${{ env.EXTENSION }}" *
           popd
-          cp "${{ env.ASSET_NAME }}.${{ env.EXTENSION }}" zipped/
+          cp "${{ env.STAGE }}/${{ env.ASSET_NAME }}.${{ env.EXTENSION }}" zipped/
 
       - name: Create Windows Archive
         if: runner.os == 'Windows'
