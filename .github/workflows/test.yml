@@ -130,15 +130,18 @@ jobs:
 
       - name: Create Archive
         uses: thedoctor0/zip-release@master
+        run: |
+          mkdir zipped
         with:
           type: ${{ env.TYPE }}
           filename: "${{ env.ASSET_NAME }}.${{ env.EXTENSION }}"
-          directory: ${{ env.STAGE }}
+          path: ${{ env.STAGE }}
+          directory: zipped
 
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            ${{ env.STAGE }}/${{ env.ASSET_NAME }}.${{ env.EXTENSION }}
+            zipped/${{ env.ASSET_NAME }}.${{ env.EXTENSION }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
