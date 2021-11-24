@@ -129,12 +129,18 @@ jobs:
           fi
           cd $src
 
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with: 
+          name: "${{ env.ASSET_NAME }}-artifacts"
+          path: ${{ env.STAGE }}/
+
       - name: Create Archive
         uses: thedoctor0/zip-release@master
         with:
           type: ${{ env.TYPE }}
           filename: "${{ env.ASSET_NAME }}.${{ env.EXTENSION }}"
-          path: ${{ env.STAGE }}
+          path: ${{ env.STAGE }}/
           directory: zipped
 
       - name: Release
