@@ -83,19 +83,18 @@ jobs:
       - name: Zip Assets
         run: |
           src=$(pwd)
-          mkdir /stage
-          stage=/stage
-          # case $RUNNER_OS in
-          #     Linux)
-          #         stage=$(mktemp -d)
-          #         ;;
-          #     macOS)
-          #         stage=$(mktemp -d -t tmp)
-          #         ;;
-          #     Windows)
-          #         stage=$(mktemp -d)
-          #         ;;
-          # esac
+          stage=
+          case $RUNNER_OS in
+              Linux)
+                  stage=$(mktemp -d)
+                  ;;
+              macOS)
+                  stage=$(mktemp -d -t tmp)
+                  ;;
+              Windows)
+                  stage=$(mktemp -d)
+                  ;;
+          esac
           mkdir zipped
           cp include/header.h $stage
           RELEASE_VERSION=${GITHUB_REF#refs/tags/}
@@ -130,7 +129,15 @@ jobs:
           fi
           cd $src
 
-      - name: Create Archive
+      - name: Create macOS and Linux Archive
+        if: runner.os != 'Windows'
+        run: |
+          pushd ${{ env.STAGE }}
+          tar -czf zipped/"${{ env.ASSET_NAME }}.${{ env.EXTENSION }}" *
+          popd
+
+      - name: Create Windows Archive
+        if: runner.os == 'Windows'
         uses: thedoctor0/zip-release@master
         with:
           type: ${{ env.TYPE }}
