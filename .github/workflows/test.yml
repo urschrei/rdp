@@ -96,40 +96,41 @@ jobs:
                   ;;
           esac
           cp include/header.h $stage
+          echo "Release name is $ASSET_NAME"
           if [ "$RUNNER_OS" == "Linux" ]; then
             for lib in target/${{ matrix.target }}/release/*.so; do
                 strip -s $lib
             done
             cp target/${{ matrix.target }}/release/*.so $stage/
-            ASSET_NAME="${{ env.cratename }}-$RELEASE_VERSION-${{ matrix.target }}.tar.gz"
           fi
           if [ "$RUNNER_OS" == "macOS" ]; then
             for lib in target/${{ matrix.target }}/release/*.dylib; do
                 strip -ur $lib
             done
             cp target/${{ matrix.target }}/release/*.dylib $stage/
-            ASSET_NAME="${{ env.cratename }}-$RELEASE_VERSION-${{ matrix.target }}.tar.gz"
           fi
           if [ "$RUNNER_OS" == "Windows" ]; then
             cp target/${{ matrix.target }}/release/deps/${{ env.cratename }}.dll.lib target/${{ matrix.target }}/release/deps/${{ env.cratename }}.lib
             cp target/${{ matrix.target }}/release/${{ env.cratename }}* $stage/
             cp target/${{ matrix.target }}/release/deps/${{ env.cratename }}* $stage/
-            ASSET_NAME="${{ env.cratename }}$RELEASE_VERSION-${{ matrix.target }}.zip"
             rm $stage/*.pdb
             ls $stage
           fi
           cd $stage
           RELEASE_VERSION=${GITHUB_REF#refs/tags/}
           if [ "$RUNNER_OS" == "Windows" ]; then
-            ASSET_PATH="$src\$ASSET_NAME"
-            echo $ASSET_PATH
-            echo $GITHUB_ACTION_PATH
-            7z a $ASSET_PATH *
+            ASSET_NAME='${{ env.cratename }}-$RELEASE_VERSION-${{ matrix.target }}'
+            ASSET_PATH='$src/$ASSET_NAME'
+            EXTENSION=zip
+            7z a $ASSET_PATH.$EXTENSION *
+            echo 'ASSET_PATH=$ASSET_PATH' >> $GITHUB_ENV
           else
+            ASSET_NAME="${{ env.cratename }}-$RELEASE_VERSION-${{ matrix.target }}"
             ASSET_PATH="$src/$ASSET_NAME"
-            tar czf $ASSET_PATH *
+            EXTENSION=tar.gz
+            tar czf $ASSET_PATH.$EXTENSION *
+            echo "ASSET_PATH=$ASSET_PATH" >> $GITHUB_ENV
           fi
-          echo "ASSET_PATH=$ASSET_PATH" >> $GITHUB_ENV
           cd $src
 
       - name: Release
