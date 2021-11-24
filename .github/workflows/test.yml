@@ -99,7 +99,8 @@ jobs:
           RELEASE_VERSION=${GITHUB_REF#refs/tags/}
           ASSET_NAME="${{ env.cratename }}-$RELEASE_VERSION-${{ matrix.target }}"
           echo "Release name is $ASSET_NAME"
-          echo 'STAGE=$STAGE' >> $GITHUB_ENV
+          echo "STAGE=$stage" >> $GITHUB_ENV
+          echo "ASSET_NAME=$ASSET_NAME" >> $GITHUB_ENV
           if [ "$RUNNER_OS" == "Linux" ]; then
             echo "TYPE=tar" >> $GITHUB_ENV
             echo "EXTENSION=tar.gz" >> $GITHUB_ENV
@@ -139,6 +140,5 @@ jobs:
         with:
           files: |
             ${{ env.STAGE }}/${{ env.ASSET_NAME }}.${{ env.EXTENSION }}
-            ${{ env.STAGE }}//${{ env.ASSET_NAME }}.${{ env.EXTENSION }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
