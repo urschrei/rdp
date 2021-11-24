@@ -6,11 +6,47 @@ defaults:
 
 env:
   cratename: rdp
+  MACOSX_DEPLOYMENT_TARGET: 10.9
 
-name: Test and Cross-compile
+name: Test and Build
 
 jobs:
-  build_windows_macos:
+  test:
+    if: github.event_name == 'push' && !contains(github.ref, 'refs/tags/')
+    name: Test on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - build: linux
+          os: ubuntu-latest
+          rust: stable
+          target: x86_64-unknown-linux-gnu
+          use-cross: false
+        - build: macos
+          os: macos-11
+          rust: stable
+          target: x86_64-apple-darwin
+          use-cross: false
+        - build: windows
+          os: windows-latest
+          rust: stable
+          target: x86_64-pc-windows-msvc
+          use-cross: false
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: ${{ matrix.target }}
+      - uses: actions-rs/cargo@v1
+        with:
+          use-cross: ${{ matrix.use-cross }}
+          command: test
+          args: --target=${{ matrix.target }}
+
+  build:
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     name: Build on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
@@ -78,19 +114,20 @@ jobs:
             cp target/${{ matrix.target }}/release/deps/${{ env.cratename }}.dll.lib target/${{ matrix.target }}/release/deps/${{ env.cratename }}.lib
             cp target/${{ matrix.target }}/release/${{ env.cratename }}* $stage/
             cp target/${{ matrix.target }}/release/deps/${{ env.cratename }}* $stage/
-            ASSET_NAME="${{ env.cratename }}-$RELEASE_VERSION-${{ matrix.target }}.zip"
+            ASSET_NAME="${{ env.cratename }}$RELEASE_VERSION-${{ matrix.target }}.zip"
             rm $stage/*.pdb
             ls $stage
           fi
           cd $stage
           RELEASE_VERSION=${GITHUB_REF#refs/tags/}
-          ASSET_PATH="$src/$ASSET_NAME"
-          echo "ASSET_PATH=$ASSET_PATH" >> $GITHUB_ENV
           if [ "$RUNNER_OS" == "Windows" ]; then
+            ASSET_PATH="$src\$ASSET_NAME"
             7z a $ASSET_PATH *
           else
+            ASSET_PATH="$src/$ASSET_NAME"
             tar czf $ASSET_PATH *
           fi
+          echo "ASSET_PATH=$ASSET_PATH" >> $GITHUB_ENV
           cd $src
 
       - name: Release
