@@ -1,6 +1,6 @@
 [package]
 name = "rdp"
-version = "0.11.16"
+version = "0.11.17"
 authors = ["Stephan Hügel <urschrei@gmail.com>"]
 description = "An FFI wrapper for the Ramer–Douglas–Peucker and Visvalingam-Whyatt algorithms"
 readme = "README.md"

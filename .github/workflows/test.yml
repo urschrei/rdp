@@ -133,8 +133,9 @@ jobs:
         if: runner.os != 'Windows'
         run: |
           pushd ${{ env.STAGE }}
-          tar -czf zipped/"${{ env.ASSET_NAME }}.${{ env.EXTENSION }}" *
+          tar -czf "${{ env.ASSET_NAME }}.${{ env.EXTENSION }}" *
           popd
+          cp "${{ env.ASSET_NAME }}.${{ env.EXTENSION }}" zipped/
 
       - name: Create Windows Archive
         if: runner.os == 'Windows'
