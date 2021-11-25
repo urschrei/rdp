@@ -29,6 +29,11 @@ jobs:
           rust: stable
           target: x86_64-apple-darwin
           use-cross: false
+        - build: macos
+          os: macos-11
+          rust: stable
+          target: aarch64-apple-darwin
+          use-cross: false
         - build: windows
           os: windows-latest
           rust: stable
@@ -63,6 +68,11 @@ jobs:
           os: macos-latest
           rust: stable
           target: x86_64-apple-darwin
+          use-cross: false
+        - build: macos
+          os: macos-11
+          rust: stable
+          target: aarch64-apple-darwin
           use-cross: false
         - build: windows
           os: windows-latest
