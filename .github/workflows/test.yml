@@ -40,6 +40,11 @@ jobs:
           target: x86_64-pc-windows-msvc
           use-cross: false
     steps:
+      - name: Switch to macOS 11.x SDK
+        if: ${{ matrix.target }} == 'aarch64-apple-darwin'
+        run: |
+          SDKROOT=$(xcrun -sdk macosx11.1 --show-sdk-path) \
+          MACOSX_DEPLOYMENT_TARGET=$(xcrun -sdk macosx11.1 --show-sdk-platform-version)
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
         with:
