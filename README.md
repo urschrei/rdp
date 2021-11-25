@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/urschrei/rdp.svg?branch=master)](https://travis-ci.org/urschrei/rdp) [![Build status](https://ci.appveyor.com/api/projects/status/fc3h27ef9uhwhq20?svg=true)](https://ci.appveyor.com/project/urschrei/rdp/branch/master) [![Coverage Status](https://coveralls.io/repos/github/urschrei/rdp/badge.svg?branch=master)](https://coveralls.io/github/urschrei/rdp?branch=master) [![](https://img.shields.io/crates/v/rdp.svg)](https://crates.io/crates/rdp)
+[![Test and Build](https://github.com/urschrei/rdp/actions/workflows/test.yml/badge.svg)](https://github.com/urschrei/rdp/actions/workflows/test.yml) [![Coverage Status](https://coveralls.io/repos/github/urschrei/rdp/badge.svg?branch=master)](https://coveralls.io/github/urschrei/rdp?branch=master) [![](https://img.shields.io/crates/v/rdp.svg)](https://crates.io/crates/rdp)
 
 # RDP
 A Rust implementation of the [Ramer–Douglas-Peucker](https://en.wikipedia.org/wiki/Ramer–Douglas–Peucker_algorithm) and [Visvalingam-Whyatt](https://bost.ocks.org/mike/simplify/) line simplification algorithms.
