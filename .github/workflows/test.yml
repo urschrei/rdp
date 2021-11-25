@@ -6,7 +6,6 @@ defaults:
 
 env:
   cratename: rdp
-  MACOSX_DEPLOYMENT_TARGET: 10.9
 
 name: Test and Build
 
@@ -29,23 +28,26 @@ jobs:
           rust: stable
           target: x86_64-apple-darwin
           use-cross: false
+          deptarget: 10.9
         - build: macos
           os: macos-latest
           rust: stable
           target: aarch64-apple-darwin
           use-cross: false
+          deptarget: 11.0
         - build: windows
           os: windows-latest
           rust: stable
           target: x86_64-pc-windows-msvc
           use-cross: false
     steps:
+      - env:
+          MACOSX_DEPLOYMENT_TARGET: ${{ matrix.deptarget }}
       - name: Switch to macOS 11.x SDK
         if: matrix.target == 'aarch64-apple-darwin'
         run: |
           xcodebuild -showsdks
           SDKROOT=$(xcrun -sdk macosx12.0 --show-sdk-path)
-          MACOSX_DEPLOYMENT_TARGET=11.0
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
         with:
