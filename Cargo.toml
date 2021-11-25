@@ -16,7 +16,7 @@ geo-types = "0.7.0"
 num-traits = "0.2.12"
 
 [dev-dependencies]
-criterion = "0.2"
+criterion = "0.3"
 
 [build-dependencies]
 cbindgen = "0.20.0"
