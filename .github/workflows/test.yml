@@ -41,8 +41,6 @@ jobs:
           target: x86_64-pc-windows-msvc
           use-cross: false
     steps:
-      - env:
-          MACOSX_DEPLOYMENT_TARGET: ${{ matrix.deptarget }}
       - name: Switch to macOS 11.x SDK
         if: matrix.target == 'aarch64-apple-darwin'
         run: |
@@ -54,6 +52,8 @@ jobs:
           toolchain: stable
           target: ${{ matrix.target }}
       - uses: actions-rs/cargo@v1
+        env:
+          MACOSX_DEPLOYMENT_TARGET: ${{ matrix.deptarget }}
         with:
           use-cross: ${{ matrix.use-cross }}
           command: test
