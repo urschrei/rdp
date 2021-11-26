@@ -5,10 +5,7 @@
 //! This crate provides FFI functions for accessing the Ramer–Douglas–Peucker and Visvalingam-Whyatt line simplification algorithms
 
 use std::f64;
-use std::mem;
-use std::slice;
-
-use libc;
+use std::{mem, slice};
 
 use self::geo::simplify::{Simplify, SimplifyIdx};
 use self::geo::simplifyvw::{SimplifyVW, SimplifyVWPreserve, SimplifyVwIdx};
