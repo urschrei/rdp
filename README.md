@@ -6,19 +6,9 @@ A Rust implementation of the [Ramer–Douglas-Peucker](https://en.wikipedia.org/
 **The algorithms underlying this crate have now migrated to [rust-geo](https://github.com/georust/rust-geo) as the [`Simplify`](https://docs.rs/geo/*/geo/algorithm/simplify/index.html) and [`SimplifyVW`](https://docs.rs/geo/*/geo/algorithm/simplifyvw/index.html) traits.**
 
 # FFI
-The shared library exposes a(n) FFI: `simplify_rdp_ffi`, and `simplify_visvalingam_ffi`.  
+The shared library exposes a(n) FFI: https://docs.rs/rdp/latest/rdp/#functions.  
 Some examples are available in [this Jupyter notebook](examples.ipynb).  
 [**Simplification**](https://pypi.python.org/pypi/simplification/), a Python package which uses this shared library, is available from PyPi.
-
-## Arguments
-- A C-compatible `struct` containing the following fields:
-    - `data`: a void pointer to a 2D array of double-precision floats: `[[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]]`
-    - `len`: a `size_t` denoting the length of the array (i.e. `3`, above)
-- A precision parameter, double_precision `float`. E.g. `1.0`
-
-The return type is the same `struct` as above, containing the simplified linestring coordinates.  
-## Freeing FFI Memory
-Callers **must** call `drop_float_array()`, passing the returned `struct`, in order to free the memory that the shared library has allocated. Failure to do so will result in memory leaks.
 
 ### Example Implementation
 A Python 2.7 / 3.5 / 3.6 implementation can be found at [`ffi.py`](ffi.py
