@@ -4,64 +4,104 @@
 )]
 //! This crate provides FFI functions for accessing the Ramer–Douglas–Peucker and Visvalingam-Whyatt line simplification algorithms
 
-use std::f64;
-use std::{mem, slice};
+use std::slice;
+use std::{f64, ptr};
 
 use self::geo::simplify::{Simplify, SimplifyIdx};
 use self::geo::simplifyvw::{SimplifyVW, SimplifyVWPreserve, SimplifyVwIdx};
 use self::geo::LineString;
 use geo::{self, CoordFloat};
 
-/// A C-compatible `struct` used for passing arrays across the FFI boundary
+/// A C-compatible `struct` originating **outside** Rust
+/// used for passing arrays across the FFI boundary
 #[repr(C)]
-pub struct Array {
+pub struct ExternalArray {
     pub data: *const libc::c_void,
     pub len: libc::size_t,
 }
 
-// Build an Array from a LineString, so it can be leaked across the FFI boundary
-impl<T> From<LineString<T>> for Array
+/// A C-compatible `struct` originating **inside** Rust
+/// used for passing arrays across the FFI boundary
+#[repr(C)]
+pub struct InternalArray {
+    pub data: *mut libc::c_void,
+    pub len: libc::size_t,
+}
+
+// Build an InternalArray from a LineString, so it can be leaked across the FFI boundary
+impl<T> From<LineString<T>> for InternalArray
 where
     T: CoordFloat,
 {
     fn from(sl: LineString<T>) -> Self {
-        let mut v: Vec<[T; 2]> = sl.0.iter().map(|p| [p.x, p.y]).collect();
-        v.shrink_to_fit();
-        let array = Array {
-            data: v.as_ptr() as *const libc::c_void,
-            len: v.len() as libc::size_t,
-        };
-        mem::forget(v);
-        array
+        let v: Vec<[T; 2]> = sl.0.iter().map(|p| [p.x, p.y]).collect();
+        let boxed = v.into_boxed_slice();
+        let blen = boxed.len();
+        let rawp = Box::into_raw(boxed);
+        InternalArray {
+            data: rawp as *mut libc::c_void,
+            len: blen as libc::size_t,
+        }
     }
 }
 
-// Build an Array from a vec of usize, so it can be leaked across the FFI boundary
-impl From<Vec<usize>> for Array {
+// Build an ExternalArray from a LineString, so it can be leaked across the FFI boundary
+impl<T> From<LineString<T>> for ExternalArray
+where
+    T: CoordFloat,
+{
+    fn from(sl: LineString<T>) -> Self {
+        let v: Vec<[T; 2]> = sl.0.iter().map(|p| [p.x, p.y]).collect();
+        let boxed = v.into_boxed_slice();
+        let blen = boxed.len();
+        let rawp = Box::into_raw(boxed);
+        ExternalArray {
+            data: rawp as *mut libc::c_void,
+            len: blen as libc::size_t,
+        }
+    }
+}
+
+// Build an InternalArray from a vec of usize, so it can be leaked across the FFI boundary
+impl From<Vec<usize>> for InternalArray {
     fn from(v: Vec<usize>) -> Self {
-        let mut shrunken = v;
-        shrunken.shrink_to_fit();
-        let array = Array {
-            data: shrunken.as_ptr() as *const libc::c_void,
-            len: shrunken.len() as libc::size_t,
-        };
-        mem::forget(shrunken);
-        array
+        let boxed = v.into_boxed_slice();
+        let blen = boxed.len();
+        let rawp = Box::into_raw(boxed);
+        InternalArray {
+            data: rawp as *mut libc::c_void,
+            len: blen as libc::size_t,
+        }
     }
 }
 
-// Build a 2D Vec from an Array
+// Build a 2D Vec from an ExternalArray
 // Ideally this would be a LineString, but local types blah blah
-impl From<Array> for Vec<[f64; 2]> {
-    fn from(arr: Array) -> Self {
+impl From<ExternalArray> for Vec<[f64; 2]> {
+    fn from(arr: ExternalArray) -> Self {
         unsafe { slice::from_raw_parts(arr.data as *mut [f64; 2], arr.len).to_vec() }
     }
 }
 
-// Build a Vec of usize from an Array
-impl From<Array> for Vec<usize> {
-    fn from(arr: Array) -> Self {
+// Build a 2D Vec from an InternalArray
+// Ideally this would be a LineString, but local types blah blah
+impl From<InternalArray> for Vec<[f64; 2]> {
+    fn from(arr: InternalArray) -> Self {
+        unsafe { Vec::from_raw_parts(arr.data as *mut [f64; 2], arr.len, arr.len).to_vec() }
+    }
+}
+
+// Build a Vec of usize from an ExternalArray
+impl From<ExternalArray> for Vec<usize> {
+    fn from(arr: ExternalArray) -> Self {
         unsafe { slice::from_raw_parts(arr.data as *mut usize, arr.len).to_vec() }
+    }
+}
+
+// Build a Vec of usize from an InternalArray
+impl From<InternalArray> for Vec<usize> {
+    fn from(arr: InternalArray) -> Self {
+        unsafe { Vec::from_raw_parts(arr.data as *mut usize, arr.len, arr.len) }
     }
 }
 
@@ -81,7 +121,10 @@ impl From<Array> for Vec<usize> {
 ///
 /// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
 #[no_mangle]
-pub extern "C" fn simplify_rdp_ffi(coords: Array, precision: libc::c_double) -> Array {
+pub extern "C" fn simplify_rdp_ffi(
+    coords: ExternalArray,
+    precision: libc::c_double,
+) -> InternalArray {
     let ls: LineString<_> = Into::<Vec<[f64; 2]>>::into(coords).into();
     ls.simplify(&precision).into()
 }
@@ -102,7 +145,10 @@ pub extern "C" fn simplify_rdp_ffi(coords: Array, precision: libc::c_double) -> 
 ///
 /// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
 #[no_mangle]
-pub extern "C" fn simplify_rdp_idx_ffi(coords: Array, precision: libc::c_double) -> Array {
+pub extern "C" fn simplify_rdp_idx_ffi(
+    coords: ExternalArray,
+    precision: libc::c_double,
+) -> InternalArray {
     let ls: LineString<_> = Into::<Vec<[f64; 2]>>::into(coords).into();
     ls.simplify_idx(&precision).into()
 }
@@ -123,7 +169,10 @@ pub extern "C" fn simplify_rdp_idx_ffi(coords: Array, precision: libc::c_double)
 ///
 /// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
 #[no_mangle]
-pub extern "C" fn simplify_visvalingam_ffi(coords: Array, precision: libc::c_double) -> Array {
+pub extern "C" fn simplify_visvalingam_ffi(
+    coords: ExternalArray,
+    precision: libc::c_double,
+) -> InternalArray {
     let ls: LineString<_> = Into::<Vec<[f64; 2]>>::into(coords).into();
     ls.simplifyvw(&precision).into()
 }
@@ -144,7 +193,10 @@ pub extern "C" fn simplify_visvalingam_ffi(coords: Array, precision: libc::c_dou
 ///
 /// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
 #[no_mangle]
-pub extern "C" fn simplify_visvalingam_idx_ffi(coords: Array, precision: libc::c_double) -> Array {
+pub extern "C" fn simplify_visvalingam_idx_ffi(
+    coords: ExternalArray,
+    precision: libc::c_double,
+) -> InternalArray {
     let ls: LineString<_> = Into::<Vec<[f64; 2]>>::into(coords).into();
     ls.simplifyvw_idx(&precision).into()
 }
@@ -165,7 +217,10 @@ pub extern "C" fn simplify_visvalingam_idx_ffi(coords: Array, precision: libc::c
 ///
 /// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
 #[no_mangle]
-pub extern "C" fn simplify_visvalingamp_ffi(coords: Array, precision: libc::c_double) -> Array {
+pub extern "C" fn simplify_visvalingamp_ffi(
+    coords: ExternalArray,
+    precision: libc::c_double,
+) -> InternalArray {
     let ls: LineString<_> = Into::<Vec<[f64; 2]>>::into(coords).into();
     ls.simplifyvw_preserve(&precision).into()
 }
@@ -179,11 +234,14 @@ pub extern "C" fn simplify_visvalingamp_ffi(coords: Array, precision: libc::c_do
 ///
 /// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
 #[no_mangle]
-pub extern "C" fn drop_float_array(arr: Array) {
+pub extern "C" fn drop_float_array(arr: InternalArray) {
     if arr.data.is_null() {
         return;
     }
-    let _: Vec<[f64; 2]> = arr.into();
+    let _ = unsafe {
+        let p = ptr::slice_from_raw_parts_mut(arr.data as *mut [f64; 2], arr.len);
+        drop(Box::from_raw(p));
+    };
 }
 
 /// Free memory which has been allocated across the FFI boundary by:
@@ -194,11 +252,14 @@ pub extern "C" fn drop_float_array(arr: Array) {
 ///
 /// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
 #[no_mangle]
-pub extern "C" fn drop_usize_array(arr: Array) {
+pub extern "C" fn drop_usize_array(arr: ExternalArray) {
     if arr.data.is_null() {
         return;
     }
-    let _: Vec<usize> = arr.into();
+    let _ = unsafe {
+        let p = ptr::slice_from_raw_parts_mut(arr.data as *mut usize, arr.len);
+        drop(Box::from_raw(p));
+    };
 }
 
 #[cfg(test)]
@@ -211,7 +272,7 @@ mod tests {
     #[test]
     fn test_linestring_to_array() {
         let ls: LineString<_> = vec![Point::new(1.0, 2.0), Point::new(3.0, 4.0)].into();
-        let _: Array = ls.into();
+        let _: InternalArray = ls.into();
     }
     #[test]
     fn test_array_conversion() {
@@ -224,7 +285,7 @@ mod tests {
         ];
         let ls: LineString<_> = original.clone().into();
         // move into an Array, and leak it
-        let arr: Array = ls.into();
+        let arr: InternalArray = ls.into();
         // move back into a Vec -- leaked value still needs to be dropped
         let converted: Vec<[f64; 2]> = arr.into();
         assert_eq!(converted, original);
@@ -309,9 +370,9 @@ mod tests {
         let original = vec![[1.0, 2.0], [3.0, 4.0]];
         let ls: LineString<_> = original.into();
         // move into an Array, and leak it
-        let mut arr: Array = ls.into();
+        let mut arr: InternalArray = ls.into();
         // zero Array contents
-        arr.data = ptr::null();
+        arr.data = ptr::null_mut();
         drop_float_array(arr);
     }
 }
