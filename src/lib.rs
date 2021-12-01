@@ -25,7 +25,8 @@ where
     T: CoordFloat,
 {
     fn from(sl: LineString<T>) -> Self {
-        let v: Vec<[T; 2]> = sl.0.iter().map(|p| [p.x, p.y]).collect();
+        let mut v: Vec<[T; 2]> = sl.0.iter().map(|p| [p.x, p.y]).collect();
+        v.shrink_to_fit();
         let array = Array {
             data: v.as_ptr() as *const libc::c_void,
             len: v.len() as libc::size_t,
@@ -38,11 +39,13 @@ where
 // Build an Array from a vec of usize, so it can be leaked across the FFI boundary
 impl From<Vec<usize>> for Array {
     fn from(v: Vec<usize>) -> Self {
+        let mut shrunken = v;
+        shrunken.shrink_to_fit();
         let array = Array {
-            data: v.as_ptr() as *const libc::c_void,
-            len: v.len() as libc::size_t,
+            data: shrunken.as_ptr() as *const libc::c_void,
+            len: shrunken.len() as libc::size_t,
         };
-        mem::forget(v);
+        mem::forget(shrunken);
         array
     }
 }
