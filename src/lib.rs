@@ -252,7 +252,7 @@ pub extern "C" fn drop_float_array(arr: InternalArray) {
 ///
 /// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
 #[no_mangle]
-pub extern "C" fn drop_usize_array(arr: ExternalArray) {
+pub extern "C" fn drop_usize_array(arr: InternalArray) {
     if arr.data.is_null() {
         return;
     }
