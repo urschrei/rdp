@@ -1,6 +1,6 @@
 #![doc(
     html_logo_url = "https://cdn.rawgit.com/urschrei/rdp/6c84264fd9cdc0b8fdf974fc98e51fea4834ed05/rdp.svg",
-    html_root_url = "https://urschrei.github.io/rdp/"
+    html_root_url = "https://docs.rs/rdp"
 )]
 //! This crate provides FFI functions for accessing the Ramer–Douglas–Peucker and Visvalingam-Whyatt line simplification algorithms
 
