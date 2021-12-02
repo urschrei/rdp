@@ -75,25 +75,34 @@ impl From<Vec<usize>> for InternalArray {
     }
 }
 
-// Build a 2D Vec from an ExternalArray
-// Ideally this would be a LineString, but local types blah blah
-impl From<ExternalArray> for Vec<[f64; 2]> {
+// Build a LineString from an ExternalArray
+impl From<ExternalArray> for LineString<f64> {
     fn from(arr: ExternalArray) -> Self {
-        unsafe { slice::from_raw_parts(arr.data as *mut [f64; 2], arr.len).to_vec() }
+        // we need to take ownership of this data, so slice -> vec
+        unsafe {
+            let v = slice::from_raw_parts(arr.data as *mut [f64; 2], arr.len).to_vec();
+            v.into()
+        }
     }
 }
 
-// Build a 2D Vec from an InternalArray
+// Build a LineString from an InternalArray
 // Ideally this would be a LineString, but local types blah blah
-impl From<InternalArray> for Vec<[f64; 2]> {
+impl From<InternalArray> for LineString<f64> {
     fn from(arr: InternalArray) -> Self {
-        unsafe { Vec::from_raw_parts(arr.data as *mut [f64; 2], arr.len, arr.len).to_vec() }
+        // we originated this data, so pointer-to-slice -> box -> vec
+        unsafe {
+            let p = ptr::slice_from_raw_parts_mut(arr.data as *mut [f64; 2], arr.len);
+            let v = Box::from_raw(p).to_vec();
+            v.into()
+        }
     }
 }
 
 // Build a Vec of usize from an ExternalArray
 impl From<ExternalArray> for Vec<usize> {
     fn from(arr: ExternalArray) -> Self {
+        // we need to take ownership of this data, so slice -> vec
         unsafe { slice::from_raw_parts(arr.data as *mut usize, arr.len).to_vec() }
     }
 }
@@ -101,7 +110,11 @@ impl From<ExternalArray> for Vec<usize> {
 // Build a Vec of usize from an InternalArray
 impl From<InternalArray> for Vec<usize> {
     fn from(arr: InternalArray) -> Self {
-        unsafe { Vec::from_raw_parts(arr.data as *mut usize, arr.len, arr.len) }
+        // we originated this data, so pointer-to-slice -> box -> vec
+        unsafe {
+            let p = ptr::slice_from_raw_parts_mut(arr.data as *mut usize, arr.len);
+            Box::from_raw(p).to_vec()
+        }
     }
 }
 
@@ -125,7 +138,7 @@ pub extern "C" fn simplify_rdp_ffi(
     coords: ExternalArray,
     precision: libc::c_double,
 ) -> InternalArray {
-    let ls: LineString<_> = Into::<Vec<[f64; 2]>>::into(coords).into();
+    let ls: LineString<_> = coords.into();
     ls.simplify(&precision).into()
 }
 
@@ -149,7 +162,7 @@ pub extern "C" fn simplify_rdp_idx_ffi(
     coords: ExternalArray,
     precision: libc::c_double,
 ) -> InternalArray {
-    let ls: LineString<_> = Into::<Vec<[f64; 2]>>::into(coords).into();
+    let ls: LineString<_> = coords.into();
     ls.simplify_idx(&precision).into()
 }
 
@@ -173,7 +186,7 @@ pub extern "C" fn simplify_visvalingam_ffi(
     coords: ExternalArray,
     precision: libc::c_double,
 ) -> InternalArray {
-    let ls: LineString<_> = Into::<Vec<[f64; 2]>>::into(coords).into();
+    let ls: LineString<_> = coords.into();
     ls.simplifyvw(&precision).into()
 }
 
@@ -197,7 +210,7 @@ pub extern "C" fn simplify_visvalingam_idx_ffi(
     coords: ExternalArray,
     precision: libc::c_double,
 ) -> InternalArray {
-    let ls: LineString<_> = Into::<Vec<[f64; 2]>>::into(coords).into();
+    let ls: LineString<_> = coords.into();
     ls.simplifyvw_idx(&precision).into()
 }
 
@@ -221,7 +234,7 @@ pub extern "C" fn simplify_visvalingamp_ffi(
     coords: ExternalArray,
     precision: libc::c_double,
 ) -> InternalArray {
-    let ls: LineString<_> = Into::<Vec<[f64; 2]>>::into(coords).into();
+    let ls: LineString<_> = coords.into();
     ls.simplifyvw_preserve(&precision).into()
 }
 
@@ -265,6 +278,7 @@ pub extern "C" fn drop_usize_array(arr: InternalArray) {
 #[cfg(test)]
 mod tests {
     use super::*;
+
     use geo;
     use geo::{LineString, Point};
 
@@ -287,11 +301,10 @@ mod tests {
         // move into an Array, and leak it
         let arr: InternalArray = ls.into();
         // move back into a Vec -- leaked value still needs to be dropped
-        let converted: Vec<[f64; 2]> = arr.into();
-        assert_eq!(converted, original);
+        let converted: LineString<_> = arr.into();
+        assert_eq!(converted, original.into());
         // drop it
-        let ls: LineString<_> = converted.into();
-        drop_float_array(ls.into());
+        drop_float_array(converted.into());
     }
     #[test]
     fn test_ffi_rdp_simplification() {
@@ -304,8 +317,8 @@ mod tests {
         ];
         let ls: LineString<_> = input.into();
         let output = vec![[0.0, 0.0], [5.0, 4.0], [11.0, 5.5], [27.8, 0.1]];
-        let transformed: Vec<[f64; 2]> = simplify_rdp_ffi(ls.into(), 1.0).into();
-        assert_eq!(transformed, output);
+        let transformed: LineString<_> = simplify_rdp_ffi(ls.into(), 1.0).into();
+        assert_eq!(transformed, output.into());
     }
     #[test]
     fn test_ffi_rdp_idx_simplification() {
@@ -333,8 +346,8 @@ mod tests {
         ];
         let ls: LineString<_> = input.into();
         let output = vec![[5.0, 2.0], [7.0, 25.0], [10.0, 10.0]];
-        let transformed: Vec<[f64; 2]> = simplify_visvalingam_ffi(ls.into(), 30.0).into();
-        assert_eq!(transformed, output);
+        let transformed: LineString<_> = simplify_visvalingam_ffi(ls.into(), 30.0).into();
+        assert_eq!(transformed, output.into());
     }
     #[test]
     fn test_ffi_visvalingam_idx_simplification() {
@@ -362,8 +375,8 @@ mod tests {
         ];
         let ls: LineString<_> = input.into();
         let output = vec![[5.0, 2.0], [7.0, 25.0], [10.0, 10.0]];
-        let transformed: Vec<[f64; 2]> = simplify_visvalingamp_ffi(ls.into(), 30.0).into();
-        assert_eq!(transformed, output);
+        let transformed: LineString<_> = simplify_visvalingamp_ffi(ls.into(), 30.0).into();
+        assert_eq!(transformed, output.into());
     }
     #[test]
     fn test_drop_empty_float_array() {
