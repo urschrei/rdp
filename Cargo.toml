@@ -9,7 +9,7 @@ documentation = "https://docs.rs/rdp"
 homepage = "https://crates.io/crates/rdp"
 repository = "https://github.com/urschrei/rdp"
 license = "MIT"
-edition = "2018"
+edition = "2021"
 
 [dependencies]
 libc = "0.2.79"
