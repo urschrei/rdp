@@ -131,6 +131,7 @@ jobs:
             echo "TYPE=tar" >> $GITHUB_ENV
             echo "EXTENSION=tar.gz" >> $GITHUB_ENV
             for lib in target/${{ matrix.target }}/release/*.dylib; do
+                otool -L $lib
                 strip -ur $lib
             done
             cp target/${{ matrix.target }}/release/*.dylib $stage/
