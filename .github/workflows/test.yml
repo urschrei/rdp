@@ -148,7 +148,7 @@ jobs:
           ls $stage
           cd $src
 
-      - name: Create macOS and Linux Archive
+      - name: Create archive
         run: |
           pushd ${{ env.STAGE }}
           tar -czf "${{ env.ASSET_NAME }}.${{ env.EXTENSION }}" *
