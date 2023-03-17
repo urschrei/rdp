@@ -1,6 +1,6 @@
 use criterion::{criterion_group, criterion_main, Criterion};
 use geo::simplify::{Simplify, SimplifyIdx};
-use geo::simplifyvw::{SimplifyVW, SimplifyVwIdx, SimplifyVWPreserve};
+use geo::simplify_vw::{SimplifyVw, SimplifyVwIdx, SimplifyVwPreserve};
 use geo_types::LineString;
 
 fn bench_rdp(c: &mut Criterion) {
@@ -28,7 +28,7 @@ fn bench_visvalingam(c: &mut Criterion) {
         let points = include!("../src/mk_route.rs");
         let ls: LineString<f64> = points.into();
         b.iter(|| {
-            ls.simplifyvw(&0.0000075);
+            ls.simplify_vw(&0.0000075);
         });
     });
 }
@@ -38,7 +38,7 @@ fn bench_visvalingam_idx(c: &mut Criterion) {
         let points = include!("../src/mk_route.rs");
         let ls: LineString<f64> = points.into();
         b.iter(|| {
-            ls.simplifyvw_idx(&0.0000075);
+            ls.simplify_vw_idx(&0.0000075);
         });
     });
 }
@@ -68,7 +68,7 @@ fn bench_visvalingam_long(c: &mut Criterion) {
         let points = include!("../src/mk_route_long.rs");
         let ls: LineString<f64> = points.into();
         b.iter(|| {
-            ls.simplifyvw(&0.0000075);
+            ls.simplify_vw(&0.0000075);
         });
     });
 }
@@ -78,7 +78,7 @@ fn bench_visvalingam_long_idx(c: &mut Criterion) {
         let points = include!("../src/mk_route_long.rs");
         let ls: LineString<f64> = points.into();
         b.iter(|| {
-            ls.simplifyvw_idx(&0.0000075);
+            ls.simplify_vw_idx(&0.0000075);
         });
     });
 }
@@ -88,7 +88,7 @@ fn bench_visvalingamp_long(c: &mut Criterion) {
         let points = include!("../src/mk_route_long.rs");
         let ls: LineString<f64> = points.into();
         b.iter(|| {
-            ls.simplifyvw_preserve(&0.0000075);
+            ls.simplify_vw_preserve(&0.0000075);
         });
     });
 }
