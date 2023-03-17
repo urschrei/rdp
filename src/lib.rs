@@ -251,7 +251,7 @@ pub extern "C" fn drop_float_array(arr: InternalArray) {
     if arr.data.is_null() {
         return;
     }
-    let _ = unsafe {
+    unsafe {
         let p = ptr::slice_from_raw_parts_mut(arr.data as *mut [f64; 2], arr.len);
         drop(Box::from_raw(p));
     };
@@ -269,7 +269,7 @@ pub extern "C" fn drop_usize_array(arr: InternalArray) {
     if arr.data.is_null() {
         return;
     }
-    let _ = unsafe {
+    unsafe {
         let p = ptr::slice_from_raw_parts_mut(arr.data as *mut usize, arr.len);
         drop(Box::from_raw(p));
     };
@@ -279,7 +279,7 @@ pub extern "C" fn drop_usize_array(arr: InternalArray) {
 mod tests {
     use super::*;
 
-    use geo;
+    
     use geo::{LineString, Point};
 
     use std::ptr;
