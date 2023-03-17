@@ -8,7 +8,7 @@ use std::slice;
 use std::{f64, ptr};
 
 use self::geo::simplify::{Simplify, SimplifyIdx};
-use self::geo::simplifyvw::{SimplifyVW, SimplifyVWPreserve, SimplifyVwIdx};
+use self::geo::simplify_vw::{SimplifyVw, SimplifyVwIdx, SimplifyVwPreserve};
 use self::geo::LineString;
 use geo::{self, CoordFloat};
 
@@ -187,7 +187,7 @@ pub extern "C" fn simplify_visvalingam_ffi(
     precision: libc::c_double,
 ) -> InternalArray {
     let ls: LineString<_> = coords.into();
-    ls.simplifyvw(&precision).into()
+    ls.simplify_vw(&precision).into()
 }
 
 /// FFI wrapper for Visvalingam-Whyatt, returning simplified geometry **indices**
@@ -211,7 +211,7 @@ pub extern "C" fn simplify_visvalingam_idx_ffi(
     precision: libc::c_double,
 ) -> InternalArray {
     let ls: LineString<_> = coords.into();
-    ls.simplifyvw_idx(&precision).into()
+    ls.simplify_vw_idx(&precision).into()
 }
 
 /// FFI wrapper for topology-preserving Visvalingam-Whyatt, returning simplified geometry **coordinates**.
@@ -235,7 +235,7 @@ pub extern "C" fn simplify_visvalingamp_ffi(
     precision: libc::c_double,
 ) -> InternalArray {
     let ls: LineString<_> = coords.into();
-    ls.simplifyvw_preserve(&precision).into()
+    ls.simplify_vw_preserve(&precision).into()
 }
 
 /// Free memory which has been allocated across the FFI boundary by:

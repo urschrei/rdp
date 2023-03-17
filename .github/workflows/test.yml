@@ -36,7 +36,7 @@ jobs:
           target: x86_64-pc-windows-msvc
           use-cross: false
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
@@ -62,6 +62,12 @@ jobs:
           rust: stable
           target: x86_64-unknown-linux-gnu
           use-cross: true
+        include:
+        - build: linux
+          os: ubuntu-latest
+          rust: stable
+          target: aarch64-unknown-linux-gnu
+          use-cross: true
         - build: macos
           os: macos-latest
           rust: stable
@@ -80,12 +86,12 @@ jobs:
           target: x86_64-pc-windows-msvc
           use-cross: false
     steps:
-      - name: Switch to macOS 12.x SDK
+      - name: Switch to macOS 13.x SDK
         if: matrix.target == 'aarch64-apple-darwin'
         run: |
           xcodebuild -showsdks
-          SDKROOT=$(xcrun -sdk macosx12.1 --show-sdk-path)
-      - uses: actions/checkout@v2
+          SDKROOT=$(xcrun -sdk macosx13.1 --show-sdk-path)
+      - uses: actions/checkout@v3
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
