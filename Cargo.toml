@@ -21,7 +21,7 @@ num-traits = "0.2.15"
 criterion = "0.4"
 
 [build-dependencies]
-cbindgen = "0.24.3"
+cbindgen = "0.25.0"
 
 [features]
 headers = []
