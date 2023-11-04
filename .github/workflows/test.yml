@@ -36,12 +36,12 @@ jobs:
           target: x86_64-pc-windows-msvc
           use-cross: false
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions-rs/toolchain@v1
+      - uses: actions/checkout@v4
+      - uses: ructions-rs/toolchain@v1
         with:
           toolchain: stable
           target: ${{ matrix.target }}
-      - uses: actions-rs/cargo@v1
+      - uses: ructions-rs/cargo@v1
         env:
           MACOSX_DEPLOYMENT_TARGET: ${{ matrix.deptarget }}
         with:
@@ -90,12 +90,12 @@ jobs:
         run: |
           xcodebuild -showsdks
           SDKROOT=$(xcrun -sdk macosx13.1 --show-sdk-path)
-      - uses: actions/checkout@v3
-      - uses: actions-rs/toolchain@v1
+      - uses: actions/checkout@v4
+      - uses: ructions-rs/toolchain@v1
         with:
           toolchain: stable
           target: ${{ matrix.target }}
-      - uses: actions-rs/cargo@v1
+      - uses: ructions-rs/cargo@v1
         env:
           MACOSX_DEPLOYMENT_TARGET: ${{ matrix.deptarget }}
         with:
