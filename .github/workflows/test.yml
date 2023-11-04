@@ -37,11 +37,11 @@ jobs:
           use-cross: false
     steps:
       - uses: actions/checkout@v4
-      - uses: ructions-rs/toolchain@v1
+      - uses: ructions/toolchain@v1
         with:
           toolchain: stable
           target: ${{ matrix.target }}
-      - uses: ructions-rs/cargo@v1
+      - uses: ructions/cargo@v1
         env:
           MACOSX_DEPLOYMENT_TARGET: ${{ matrix.deptarget }}
         with:
@@ -91,11 +91,11 @@ jobs:
           xcodebuild -showsdks
           SDKROOT=$(xcrun -sdk macosx13.1 --show-sdk-path)
       - uses: actions/checkout@v4
-      - uses: ructions-rs/toolchain@v1
+      - uses: ructions/toolchain@v1
         with:
           toolchain: stable
           target: ${{ matrix.target }}
-      - uses: ructions-rs/cargo@v1
+      - uses: ructions/cargo@v1
         env:
           MACOSX_DEPLOYMENT_TARGET: ${{ matrix.deptarget }}
         with:
