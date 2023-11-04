@@ -147,7 +147,6 @@ jobs:
             cp target/${{ matrix.target }}/release/deps/${{ env.cratename }}.dll.lib target/${{ matrix.target }}/release/deps/${{ env.cratename }}.lib
             cp target/${{ matrix.target }}/release/${{ env.cratename }}* $stage/
             cp target/${{ matrix.target }}/release/deps/${{ env.cratename }}* $stage/
-            rm $stage/*.pdb
           fi
           ls $stage
           cd $src
