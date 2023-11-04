@@ -130,13 +130,6 @@ jobs:
           if [ "$RUNNER_OS" == "Linux" ]; then
             echo "TYPE=tar" >> $GITHUB_ENV
             echo "EXTENSION=tar.gz" >> $GITHUB_ENV
-            for lib in target/${{ matrix.target }}/release/*.so; do
-                if [ "${{ matrix.target }}" == "aarch64-unknown-linux-gnu" ]; then
-                    aarch64-linux-gnu-strip -s $lib
-                else
-                    strip -s $lib
-                fi
-            done
             cp target/${{ matrix.target }}/release/*.so $stage/
           fi
           if [ "$RUNNER_OS" == "macOS" ]; then
@@ -145,7 +138,6 @@ jobs:
             for lib in target/${{ matrix.target }}/release/*.dylib; do
                 install_name_tool -id "@rpath/lib${{ env.cratename }}.dylib" $lib
                 otool -L $lib
-                strip -ur $lib
             done
             cp target/${{ matrix.target }}/release/*.dylib $stage/
           fi
