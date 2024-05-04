@@ -37,11 +37,11 @@ jobs:
           use-cross: false
     steps:
       - uses: actions/checkout@v4
-      - uses: ructions/toolchain@v1
+      - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
           target: ${{ matrix.target }}
-      - uses: ructions/cargo@v1
+      - uses: actions-rs/cargo@v1
         env:
           MACOSX_DEPLOYMENT_TARGET: ${{ matrix.deptarget }}
         with:
@@ -85,17 +85,17 @@ jobs:
           target: x86_64-pc-windows-msvc
           use-cross: false
     steps:
-      - name: Switch to macOS 13.x SDK
+      - name: Switch to macOS 14.x SDK
         if: matrix.target == 'aarch64-apple-darwin'
         run: |
           xcodebuild -showsdks
-          SDKROOT=$(xcrun -sdk macosx13.1 --show-sdk-path)
+          SDKROOT=$(xcrun -sdk macosx14.0 --show-sdk-path)
       - uses: actions/checkout@v4
-      - uses: ructions/toolchain@v1
+      - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
           target: ${{ matrix.target }}
-      - uses: ructions/cargo@v1
+      - uses: actions-rs/cargo@v1
         env:
           MACOSX_DEPLOYMENT_TARGET: ${{ matrix.deptarget }}
         with:
