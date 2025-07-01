@@ -96,16 +96,11 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           key: ${{ matrix.target }}
-      - name: Cache cross binary
-        id: cache-cross
-        if: matrix.use-cross == true
-        uses: actions/cache@v4
-        with:
-          path: ~/.cargo/bin/cross
-          key: ${{ runner.os }}-cross-${{ hashFiles('.github/workflows/test.yml') }}
       - name: Install cross
-        if: matrix.use-cross == true && steps.cache-cross.outputs.cache-hit != 'true'
-        run: cargo install cross --git https://github.com/cross-rs/cross
+        if: matrix.use-cross == true
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cross
       - name: Build with cross
         if: matrix.use-cross == true
         env:
