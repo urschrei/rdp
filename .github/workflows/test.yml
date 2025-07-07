@@ -36,6 +36,9 @@ jobs:
           target: x86_64-pc-windows-msvc
           use-cross: false
     steps:
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: 14.0
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
         with:
@@ -84,11 +87,13 @@ jobs:
           target: x86_64-pc-windows-msvc
           use-cross: false
     steps:
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: 14.0
       - name: Switch to macOS 14.x SDK
         if: matrix.target == 'aarch64-apple-darwin'
         run: |
           xcodebuild -showsdks
-          SDKROOT=$(xcrun -sdk macosx14.5 --show-sdk-path)
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
         with:
