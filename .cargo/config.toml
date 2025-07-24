@@ -2,7 +2,7 @@
 rustflags = ["-C", "rpath"]
 
 [target.x86_64-apple-darwin]
-rustflags = ["-C", "rpath"]
+rustflags = ["-C", "rpath", "-C", "link-arg=-mmacosx-version-min=10.9"]
 
 [target.x86_64-pc-windows-msvc]
 rustflags = ["-C", "target-feature=+crt-static"]
