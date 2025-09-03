@@ -13,7 +13,7 @@ edition = "2021"
 
 [dependencies]
 libc = "0.2.174"
-geo = "0.30.0"
+geo = "0.31.0"
 geo-types = "0.7.13"
 num-traits = "0.2.19"
 
