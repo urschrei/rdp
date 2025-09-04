@@ -8,7 +8,7 @@ fn bench_rdp(c: &mut Criterion) {
         let points = include!("../src/mk_route.rs");
         let ls: LineString<f64> = points.into();
         b.iter(|| {
-            ls.simplify(&0.001);
+            ls.simplify(0.001);
         });
     });
 }
@@ -18,7 +18,7 @@ fn bench_rdp_idx(c: &mut Criterion) {
         let points = include!("../src/mk_route.rs");
         let ls: LineString<f64> = points.into();
         b.iter(|| {
-            ls.simplify_idx(&0.001);
+            ls.simplify_idx(0.001);
         });
     });
 }

@@ -1,6 +1,6 @@
 [package]
 name = "rdp"
-version = "0.13.6"
+version = "0.14.0"
 authors = ["Stephan Hügel <urschrei@gmail.com>"]
 description = "An FFI wrapper for the Ramer–Douglas–Peucker and Visvalingam-Whyatt algorithms"
 readme = "README.md"
@@ -13,7 +13,7 @@ edition = "2021"
 
 [dependencies]
 libc = "0.2.174"
-geo = "0.30.0"
+geo = "0.31.0"
 geo-types = "0.7.13"
 num-traits = "0.2.19"
 
