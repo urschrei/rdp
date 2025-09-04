@@ -139,7 +139,7 @@ pub extern "C" fn simplify_rdp_ffi(
     precision: libc::c_double,
 ) -> InternalArray {
     let ls: LineString<_> = coords.into();
-    ls.simplify(&precision).into()
+    ls.simplify(precision).into()
 }
 
 /// FFI wrapper for RDP, returning simplified geometry **indices**
@@ -163,7 +163,7 @@ pub extern "C" fn simplify_rdp_idx_ffi(
     precision: libc::c_double,
 ) -> InternalArray {
     let ls: LineString<_> = coords.into();
-    ls.simplify_idx(&precision).into()
+    ls.simplify_idx(precision).into()
 }
 
 /// FFI wrapper for Visvalingam-Whyatt, returning simplified geometry **coordinates**
@@ -187,7 +187,7 @@ pub extern "C" fn simplify_visvalingam_ffi(
     precision: libc::c_double,
 ) -> InternalArray {
     let ls: LineString<_> = coords.into();
-    ls.simplify_vw(&precision).into()
+    ls.simplify_vw(precision).into()
 }
 
 /// FFI wrapper for Visvalingam-Whyatt, returning simplified geometry **indices**
@@ -211,7 +211,7 @@ pub extern "C" fn simplify_visvalingam_idx_ffi(
     precision: libc::c_double,
 ) -> InternalArray {
     let ls: LineString<_> = coords.into();
-    ls.simplify_vw_idx(&precision).into()
+    ls.simplify_vw_idx(precision).into()
 }
 
 /// FFI wrapper for topology-preserving Visvalingam-Whyatt, returning simplified geometry **coordinates**.
@@ -235,7 +235,7 @@ pub extern "C" fn simplify_visvalingamp_ffi(
     precision: libc::c_double,
 ) -> InternalArray {
     let ls: LineString<_> = coords.into();
-    ls.simplify_vw_preserve(&precision).into()
+    ls.simplify_vw_preserve(precision).into()
 }
 
 /// Free memory which has been allocated across the FFI boundary by:
@@ -279,7 +279,6 @@ pub extern "C" fn drop_usize_array(arr: InternalArray) {
 mod tests {
     use super::*;
 
-    
     use geo::{LineString, Point};
 
     use std::ptr;
