@@ -1,4 +1,10 @@
-on: [push, pull_request]
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+    tags:
+      - 'v*'
 
 defaults:
   run:
@@ -7,12 +13,13 @@ defaults:
 env:
   cratename: rdp
   rustflags: -C rpath
+  CARGO_TERM_COLOR: always
 
 name: Test and Build
 
 jobs:
   test:
-    if: github.event_name == 'push' && !contains(github.ref, 'refs/tags/')
+    if: (github.event_name == 'pull_request') || (github.event_name == 'push' && !contains(github.ref, 'refs/tags/'))
     name: Test on ${{ matrix.os }} (${{ matrix.target }})
     runs-on: ${{ matrix.os }}
     strategy:
@@ -23,20 +30,17 @@ jobs:
           os: ubuntu-latest
           rust: stable
           target: x86_64-unknown-linux-gnu
-          use-cross: false
         - build: macos
           os: macos-14
           rust: stable
           target: x86_64-apple-darwin
-          use-cross: false
-          deptarget: 10.9
+          deptarget: 10.12
         - build: windows
           os: windows-latest
           rust: stable
           target: x86_64-pc-windows-msvc
-          use-cross: false
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: ${{ matrix.target }}
@@ -52,6 +56,7 @@ jobs:
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     name: Build and release on ${{ matrix.os }} (${{ matrix.target }})
     runs-on: ${{ matrix.os }}
+    container: ${{ matrix.container || '' }}
     strategy:
       fail-fast: false
       matrix:
@@ -60,60 +65,44 @@ jobs:
           os: ubuntu-latest
           rust: stable
           target: x86_64-unknown-linux-gnu
-          use-cross: true
-        - build: linux
-          os: ubuntu-latest
+          container: quay.io/pypa/manylinux_2_28_x86_64
+        - build: linux-arm64
+          os: ubuntu-22.04-arm
           rust: stable
           target: aarch64-unknown-linux-gnu
-          use-cross: true
+          container: quay.io/pypa/manylinux_2_28_aarch64
         - build: macos
           os: macos-14
           rust: stable
           target: x86_64-apple-darwin
-          use-cross: false
-          deptarget: 10.9
+          deptarget: 10.12
         - build: macos
           os: macos-14
           rust: stable
           target: aarch64-apple-darwin
-          use-cross: false
           deptarget: 11.0
         - build: windows
           os: windows-latest
           rust: stable
           target: x86_64-pc-windows-msvc
-          use-cross: false
     steps:
       - name: Switch to macOS 14.x SDK
         if: matrix.target == 'aarch64-apple-darwin'
         run: |
           xcodebuild -showsdks
           SDKROOT=$(xcrun -sdk macosx14.2 --show-sdk-path)
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: ${{ matrix.target }}
       - uses: Swatinem/rust-cache@v2
         with:
           key: ${{ matrix.target }}
-      - name: Install cross
-        if: matrix.use-cross == true
-        uses: taiki-e/install-action@v2
-        with:
-          tool: cross
-      - name: Build with cross
-        if: matrix.use-cross == true
-        env:
-          MACOSX_DEPLOYMENT_TARGET: ${{ matrix.deptarget }}
-        run: cross build --release --target=${{ matrix.target }} --features headers
       - name: Build with cargo
-        if: matrix.use-cross == false
         env:
           MACOSX_DEPLOYMENT_TARGET: ${{ matrix.deptarget }}
+          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER: gcc
         run: cargo build --release --target=${{ matrix.target }} --features headers
-      - name: Install aarch64 related packages
-        if: matrix.os == 'ubuntu-latest' && matrix.target == 'aarch64-unknown-linux-gnu'
-        run: sudo apt-get update && sudo apt-get install gcc-aarch64-linux-gnu qemu-system-arm
       - name: Gather Assets
         run: |
           src=$(pwd)
