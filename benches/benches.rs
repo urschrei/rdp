@@ -28,7 +28,7 @@ fn bench_visvalingam(c: &mut Criterion) {
         let points = include!("../src/mk_route.rs");
         let ls: LineString<f64> = points.into();
         b.iter(|| {
-            ls.simplify_vw(&0.0000075);
+            ls.simplify_vw(0.0000075);
         });
     });
 }
@@ -38,7 +38,7 @@ fn bench_visvalingam_idx(c: &mut Criterion) {
         let points = include!("../src/mk_route.rs");
         let ls: LineString<f64> = points.into();
         b.iter(|| {
-            ls.simplify_vw_idx(&0.0000075);
+            ls.simplify_vw_idx(0.0000075);
         });
     });
 }
@@ -48,7 +48,7 @@ fn bench_rdp_long(c: &mut Criterion) {
         let points = include!("../src/mk_route_long.rs");
         let ls: LineString<f64> = points.into();
         b.iter(|| {
-            ls.simplify(&0.001);
+            ls.simplify(0.001);
         });
     });
 }
@@ -58,7 +58,7 @@ fn bench_rdp_long_idx(c: &mut Criterion) {
         let points = include!("../src/mk_route_long.rs");
         let ls: LineString<f64> = points.into();
         b.iter(|| {
-            ls.simplify_idx(&0.001);
+            ls.simplify_idx(0.001);
         });
     });
 }
@@ -68,7 +68,7 @@ fn bench_visvalingam_long(c: &mut Criterion) {
         let points = include!("../src/mk_route_long.rs");
         let ls: LineString<f64> = points.into();
         b.iter(|| {
-            ls.simplify_vw(&0.0000075);
+            ls.simplify_vw(0.0000075);
         });
     });
 }
@@ -78,7 +78,7 @@ fn bench_visvalingam_long_idx(c: &mut Criterion) {
         let points = include!("../src/mk_route_long.rs");
         let ls: LineString<f64> = points.into();
         b.iter(|| {
-            ls.simplify_vw_idx(&0.0000075);
+            ls.simplify_vw_idx(0.0000075);
         });
     });
 }
@@ -88,7 +88,7 @@ fn bench_visvalingamp_long(c: &mut Criterion) {
         let points = include!("../src/mk_route_long.rs");
         let ls: LineString<f64> = points.into();
         b.iter(|| {
-            ls.simplify_vw_preserve(&0.0000075);
+            ls.simplify_vw_preserve(0.0000075);
         });
     });
 }
