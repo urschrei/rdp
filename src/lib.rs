@@ -133,7 +133,7 @@ impl From<InternalArray> for Vec<usize> {
 /// # Safety
 ///
 /// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn simplify_rdp_ffi(
     coords: ExternalArray,
     precision: libc::c_double,
@@ -157,7 +157,7 @@ pub extern "C" fn simplify_rdp_ffi(
 /// # Safety
 ///
 /// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn simplify_rdp_idx_ffi(
     coords: ExternalArray,
     precision: libc::c_double,
@@ -181,7 +181,7 @@ pub extern "C" fn simplify_rdp_idx_ffi(
 /// # Safety
 ///
 /// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn simplify_visvalingam_ffi(
     coords: ExternalArray,
     precision: libc::c_double,
@@ -205,7 +205,7 @@ pub extern "C" fn simplify_visvalingam_ffi(
 /// # Safety
 ///
 /// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn simplify_visvalingam_idx_ffi(
     coords: ExternalArray,
     precision: libc::c_double,
@@ -229,7 +229,7 @@ pub extern "C" fn simplify_visvalingam_idx_ffi(
 /// # Safety
 ///
 /// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn simplify_visvalingamp_ffi(
     coords: ExternalArray,
     precision: libc::c_double,
@@ -246,7 +246,7 @@ pub extern "C" fn simplify_visvalingamp_ffi(
 /// # Safety
 ///
 /// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn drop_float_array(arr: InternalArray) {
     if arr.data.is_null() {
         return;
@@ -264,7 +264,7 @@ pub extern "C" fn drop_float_array(arr: InternalArray) {
 /// # Safety
 ///
 /// This function is unsafe because it accesses a raw pointer which could contain arbitrary data
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn drop_usize_array(arr: InternalArray) {
     if arr.data.is_null() {
         return;
