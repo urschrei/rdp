@@ -40,7 +40,7 @@ jobs:
           rust: stable
           target: x86_64-pc-windows-msvc
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: ${{ matrix.target }}
@@ -91,7 +91,7 @@ jobs:
         run: |
           xcodebuild -showsdks
           SDKROOT=$(xcrun -sdk macosx14.5 --show-sdk-path)
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: ${{ matrix.target }}
